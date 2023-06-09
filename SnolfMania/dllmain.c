@@ -14,9 +14,21 @@ DLLExport bool32 LinkModLogic(EngineInfo *info, const char *id);
 void InitModAPI(void)
 {
     // [SNOLF TODO] Load any persistent settings into the ModConfig. 
+    
+    // [SNOLF TODO] Register any state hooks 
+    // e.g, Mod.AddModCallback(MODCB_ONSTAGELOAD, Snolf_ResetTimersAndShotPositions);
+
+    // [SNOLF TODO] Get existing public functions. 
+    // e.g, Player_JumpAbility_Sonic = Mod.GetPublicFunction(NULL, "Player_JumpAbility_Sonic");
+    
+    // [SNOLF TODO] Register new functions with ADD_PUBLIC_FUNC. 
+    // Something like...
+    // ADD_PUBLIC_FUNC(Snolf_UpdateShotStrength);
 
     // [SNOLF TODO] Use macros to inject custom code and overload functions from base game. 
-    // e.g, something like MOD_REGISTER_OBJ_OVERLOAD(...SNOLF_Player_Update...Player_Update...)
+    // Something like...
+    // MOD_REGISTER_OBJECT_HOOK(Player);
+    // MOD_REGISTER_OBJ_OVERLOAD(Player, Player_Update, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 #if RETRO_USE_MOD_LOADER
