@@ -8,10 +8,12 @@ set(OUTPUT_NAME "SnolfMania" CACHE STRING "The name of the built library")
 add_library(SnolfMania SHARED
     GameAPI/C/GameAPI/Game.c
     ${MOD_NAME}/dllmain.c
+    ${MOD_NAME}/Objects/Player.c
 )
 
 target_include_directories(SnolfMania PRIVATE
     ${MOD_NAME}/
+    ${MOD_NAME}/Objects/
     GameAPI/C/
 )
 

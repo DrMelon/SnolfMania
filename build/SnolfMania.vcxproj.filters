@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Programming\Projects\SnolfMania\GameAPI\C\GameAPI\Game.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Programming\Projects\SnolfMania\SnolfMania\dllmain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Programming\Projects\SnolfMania\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8CE4B99A-E905-31E2-8D07-3BEED1ACA27C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
