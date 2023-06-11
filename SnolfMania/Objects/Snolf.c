@@ -65,7 +65,7 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
 void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
     // Is player's ground speed below threshold, or are we in force-allow mode?
-    if ((abs(entity->groundVel) < 0x10000 || snolfEngine->forceAllow) && entity->onGround)
+    if ((abs(entity->groundVel) < 0x10000 || snolfEngine->forceAllow))
     {
         // Not Snolfing yet; let's begin a new Snolf shot.
         if (snolfEngine->currentShotState == SNOLF_SHOT_READY)

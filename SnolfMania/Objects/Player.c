@@ -106,16 +106,16 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
         }
         else
         {
-            if (self->groundVel)
-            {
-                int32 minRollVel = self->state == Player_State_Crouch ? 0x11000 : 0x8800;
-                if (abs(self->groundVel) >= minRollVel && !self->left && !self->right && self->down)
-                {
-                    Player_Action_Roll();
-                    RSDK.PlaySfx(Player->sfxRoll, false, 255);
-                }
-            }
-            else if (((self->angle < 0x20 || self->angle > 0xE0) && !self->collisionMode) || (self->invertGravity && self->angle == 0x80))
+            // if (self->groundVel)
+            //{
+            int32 minRollVel = self->state == Player_State_Crouch ? 0x11000 : 0x8800;
+            // if (abs(self->groundVel) >= minRollVel && !self->left && !self->right && self->down)
+            //{
+            Player_Action_Roll();
+            RSDK.PlaySfx(Player->sfxRoll, false, 255);
+            //}
+            //}
+            /*if (((self->angle < 0x20 || self->angle > 0xE0) && !self->collisionMode) || (self->invertGravity && self->angle == 0x80))
             {
                 if (self->up)
                 {
@@ -129,7 +129,7 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
                     self->timer = 0;
                     self->state = Player_State_Crouch;
                 }
-            }
+            }*/
         }
     }
 

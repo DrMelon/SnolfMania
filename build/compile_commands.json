@@ -1,22 +1,22 @@
 [
 {
   "directory": "C:/Programming/Projects/SnolfMania/build",
-  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -o CMakeFiles/SnolfMania.dir/GameAPI/C/GameAPI/Game.c.obj -c C:/Programming/Projects/SnolfMania/GameAPI/C/GameAPI/Game.c",
+  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/GameAPI/C/GameAPI/Game.c.obj -c C:/Programming/Projects/SnolfMania/GameAPI/C/GameAPI/Game.c",
   "file": "C:/Programming/Projects/SnolfMania/GameAPI/C/GameAPI/Game.c"
 },
 {
   "directory": "C:/Programming/Projects/SnolfMania/build",
-  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -o CMakeFiles/SnolfMania.dir/SnolfMania/dllmain.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/dllmain.c",
+  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/SnolfMania/dllmain.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/dllmain.c",
   "file": "C:/Programming/Projects/SnolfMania/SnolfMania/dllmain.c"
 },
 {
   "directory": "C:/Programming/Projects/SnolfMania/build",
-  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Player.c",
+  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Player.c",
   "file": "C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Player.c"
 },
 {
   "directory": "C:/Programming/Projects/SnolfMania/build",
-  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Snolf.c",
+  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Snolf.c",
   "file": "C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Snolf.c"
 }
 ]
