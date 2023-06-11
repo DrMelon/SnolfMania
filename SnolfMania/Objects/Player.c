@@ -326,9 +326,13 @@ void Player_HandleGroundAnimation_Snolfed()
                     self->skidding -= 8;
                 }
 
-                RSDK.PlaySfx(Player->sfxSkidding, false, 255);
-                EntityDust *dust = CREATE_ENTITY(Dust, self, self->position.x, self->position.y);
-                dust->state = Dust_State_DustTrail;
+                //  [SNOLF TODO] - This segfaults and I'm not sure exactly why; probably an issue with not retrieving the correct Dust object before creating this entity.
+                //  I think I'd need to use "Mod.FindObject()" to get the Dust object first.
+                //  Either way, it's not a big issue since the player will very rarely be skidding (as they'll be a ball most of the time).
+
+                // RSDK.PlaySfx(Player->sfxSkidding, false, 255);
+                // EntityDust *dust = CREATE_ENTITY(Dust, self, self->position.x, self->position.y);
+                // dust->state = Dust_State_DustTrail;
             }
         }
         else
@@ -479,7 +483,7 @@ void Player_HandleGroundAnimation_Snolfed()
 }
 
 // In SNOLF, the Player has infinite lives.
-void Snolf_EnsureInfiniteLives(void)
+bool32 Snolf_EnsureInfiniteLives(bool32 skipped)
 {
     RSDK_THIS(Player);
 
@@ -489,4 +493,6 @@ void Snolf_EnsureInfiniteLives(void)
         RSDK.PrintLog(PRINT_NORMAL, "Setting lives to 4.");
         self->lives = 4;
     }
+
+    return false; // Do not override.
 }

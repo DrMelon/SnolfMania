@@ -544,6 +544,6 @@ void Player_HandleRollDeceleration_Snolfed(void);
 void Player_HandleGroundAnimation_Snolfed(void);
 
 // Additional Functions
-void Snolf_EnsureInfiniteLives(void);
+bool32 Snolf_EnsureInfiniteLives(bool32 skipped);
 
 #endif //! OBJ_PLAYER_H

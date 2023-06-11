@@ -17,6 +17,16 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
         Player_Action_Roll();
     }
 
+    // Allow the player to control the facing at any time. Useful for visual sync.
+    if (entity->left)
+    {
+        entity->direction = FLIP_X;
+    }
+    else if (entity->right)
+    {
+        entity->direction = FLIP_NONE;
+    }
+
     Snolf_UpdateShotLogic(player, entity, snolfEngine);
 }
 
