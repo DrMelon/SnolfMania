@@ -534,6 +534,7 @@ extern void (*Player_HandleGroundRotation)();
 extern void (*Player_HandleGroundMovement)();
 extern void (*Player_HandleGroundAnimation)();
 extern void (*Player_Gravity_False)();
+extern void (*HUD_DrawNumbersBase10)(Vector2 *drawPos, int32 value, int32 digitCount);
 
 // Override Functions
 void Player_Update(void);

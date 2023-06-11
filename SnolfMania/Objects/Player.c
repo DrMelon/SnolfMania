@@ -32,6 +32,13 @@ void Player_Create(void *data)
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 1, &self->snolfEngine.horizBarAnimator, true, 0);
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 2, &self->snolfEngine.vertBarAnimator, true, 0);
     self->snolfEngine.shotsTaken = 0;
+
+    self->snolfEngine.sfxStartSnolf = RSDK.GetSfx("Global/MenuBleep.wav");
+    self->snolfEngine.sfxLockHoriz = RSDK.GetSfx("Global/MenuBleep.wav");
+    self->snolfEngine.sfxLaunchSnolf = RSDK.GetSfx("Global/Spring.wav");
+    self->snolfEngine.sfxAdjustSpin = RSDK.GetSfx("Global/Charge.wav");
+    self->snolfEngine.sfxLaunchSpinSnolf = RSDK.GetSfx("Global/Release.wav");
+    self->snolfEngine.sfxResetShot = RSDK.GetSfx("Global/Teleport.wav");
 }
 
 // Player draw function. Runs on render.
@@ -41,7 +48,7 @@ void Player_Draw()
 
     Mod.Super(Player->classID, SUPER_DRAW, NULL);
 
-    Snolf_Draw(Player, self, &self->snolfEngine);
+    // Snolf_Draw(Player, self, &self->snolfEngine);
 }
 
 void Player_StageLoad()
@@ -49,6 +56,9 @@ void Player_StageLoad()
     RSDK_THIS(Player);
 
     Mod.Super(Player->classID, SUPER_STAGELOAD, NULL);
+
+    // After the stage loads, reset shots taken counter.
+    // self->snolfEngine.shotsTaken = 0;
 }
 
 // Overriding the player's ground state; we want to prevent the player from taking actions like jumping or spindashing.

@@ -10,6 +10,7 @@ add_library(SnolfMania SHARED
     ${MOD_NAME}/dllmain.c
     ${MOD_NAME}/Objects/Player.c
     ${MOD_NAME}/Objects/Snolf.c
+    ${MOD_NAME}/Objects/HUD.c
 )
 
 target_include_directories(SnolfMania PRIVATE

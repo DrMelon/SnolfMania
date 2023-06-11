@@ -1,5 +1,6 @@
 #include "../GameAPI/C/GameAPI/Game.h"
 #include "Objects/Player.h"
+#include "Objects/HUD.h"
 #include "ModConfig.h"
 
 // [SNOLF TODO] Includes
@@ -18,6 +19,7 @@ void (*Player_Action_Roll)();
 void (*Player_HandleAirMovement)();
 void (*Player_HandleGroundRotation)();
 void (*Player_HandleGroundMovement)();
+void (*HUD_DrawNumbersBase10)(Vector2 *drawPos, int32 value, int32 digitCount) = NULL;
 
 StateMachine(Player_State_Ground);
 StateMachine(Player_State_Roll);
@@ -56,6 +58,7 @@ void InitModAPI(void)
     Player_HandleAirMovement = Mod.GetPublicFunction(NULL, "Player_HandleAirMovement");
     Player_HandleGroundRotation = Mod.GetPublicFunction(NULL, "Player_HandleGroundRotation");
     Player_HandleGroundMovement = Mod.GetPublicFunction(NULL, "Player_HandleGroundMovement");
+    HUD_DrawNumbersBase10 = Mod.GetPublicFunction(NULL, "HUD_DrawNumbersBase10");
 
     Dust_State_DustTrail = Mod.GetPublicFunction(NULL, "Dust_State_DustTrail");
 
@@ -69,6 +72,7 @@ void InitModAPI(void)
     // [SNOLF TODO] Use macros to inject custom code and overload functions from base game.
     MOD_REGISTER_OBJECT_HOOK(Player);
     MOD_REGISTER_OBJ_OVERLOAD(Player, Player_Update, NULL, NULL, Player_Draw, Player_Create, Player_StageLoad, NULL, NULL, NULL);
+    MOD_REGISTER_OBJ_OVERLOAD(HUD, NULL, NULL, NULL, HUD_Draw, NULL, NULL, NULL, NULL, NULL);
 }
 
 #if RETRO_USE_MOD_LOADER
@@ -79,7 +83,7 @@ bool32 LinkModLogic(EngineInfo *info, const char *id)
 #if MANIA_USE_PLUS
     LinkGameLogicDLL(info);
 #else
-    LinkGameLogicDLL(*info);
+    LinkGameLogicDLL(info);
 #endif
 
     globals = Mod.GetGlobals();

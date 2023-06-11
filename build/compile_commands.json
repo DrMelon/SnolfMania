@@ -18,5 +18,10 @@
   "directory": "C:/Programming/Projects/SnolfMania/build",
   "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Snolf.c",
   "file": "C:/Programming/Projects/SnolfMania/SnolfMania/Objects/Snolf.c"
+},
+{
+  "directory": "C:/Programming/Projects/SnolfMania/build",
+  "command": "\"C:/Program Files/LLVM/bin/clang.exe\" -DSnolfMania_EXPORTS @CMakeFiles/SnolfMania.dir/includes_C.rsp -g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -o CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.obj -c C:/Programming/Projects/SnolfMania/SnolfMania/Objects/HUD.c",
+  "file": "C:/Programming/Projects/SnolfMania/SnolfMania/Objects/HUD.c"
 }
 ]

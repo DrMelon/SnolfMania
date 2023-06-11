@@ -153,6 +153,30 @@ GameAPI/C/GameAPI/Game.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/GameAPI/C/GameAPI/Game.c.s
 .PHONY : GameAPI/C/GameAPI/Game.c.s
 
+SnolfMania/Objects/HUD.obj: SnolfMania/Objects/HUD.c.obj
+.PHONY : SnolfMania/Objects/HUD.obj
+
+# target to build an object file
+SnolfMania/Objects/HUD.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.obj
+.PHONY : SnolfMania/Objects/HUD.c.obj
+
+SnolfMania/Objects/HUD.i: SnolfMania/Objects/HUD.c.i
+.PHONY : SnolfMania/Objects/HUD.i
+
+# target to preprocess a source file
+SnolfMania/Objects/HUD.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.i
+.PHONY : SnolfMania/Objects/HUD.c.i
+
+SnolfMania/Objects/HUD.s: SnolfMania/Objects/HUD.c.s
+.PHONY : SnolfMania/Objects/HUD.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/HUD.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.s
+.PHONY : SnolfMania/Objects/HUD.c.s
+
 SnolfMania/Objects/Player.obj: SnolfMania/Objects/Player.c.obj
 .PHONY : SnolfMania/Objects/Player.obj
 
@@ -237,6 +261,9 @@ help:
 	@echo "... GameAPI/C/GameAPI/Game.obj"
 	@echo "... GameAPI/C/GameAPI/Game.i"
 	@echo "... GameAPI/C/GameAPI/Game.s"
+	@echo "... SnolfMania/Objects/HUD.obj"
+	@echo "... SnolfMania/Objects/HUD.i"
+	@echo "... SnolfMania/Objects/HUD.s"
 	@echo "... SnolfMania/Objects/Player.obj"
 	@echo "... SnolfMania/Objects/Player.i"
 	@echo "... SnolfMania/Objects/Player.s"

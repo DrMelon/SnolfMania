@@ -22,6 +22,9 @@ typedef struct
     int32 horizShotPower;
     int32 vertShotPower;
 
+    bool32 isSpinShot;
+    int32 spinPower;
+
     Vector2 lastGoodShotPosition;
 
     bool32 forceAllow;
@@ -31,12 +34,15 @@ typedef struct
 
     uint16 shotsFrames;
     Animator shotsTextAnimator;
-
-    uint16 horizBarFrames;
     Animator horizBarAnimator;
-
-    uint16 vertBarFrames;
     Animator vertBarAnimator;
+
+    uint16 sfxStartSnolf;
+    uint16 sfxLockHoriz;
+    uint16 sfxLaunchSnolf;
+    uint16 sfxAdjustSpin;
+    uint16 sfxLaunchSpinSnolf;
+    uint16 sfxResetShot;
 
 } SnolfEngine;
 
