@@ -149,12 +149,19 @@ void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     // Draw Meters
     if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL)
     {
-        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x + TO_FIXED(snolfEngine->horizShotPower), entity->position.y, 0x00FF00, 0x7F, INK_ADD, false);
+        Vector2 barDrawPos;
+        barDrawPos.x = entity->position.x - TO_FIXED(32);
+        barDrawPos.y = entity->position.y - TO_FIXED(16);
+        RSDK.DrawSprite(&snolfEngine->horizBarAnimator, &barDrawPos, false);
+        RSDK.DrawRect(entity->position.x - TO_FIXED(32), entity->position.y - TO_FIXED(16), TO_FIXED(snolfEngine->horizShotPower), TO_FIXED(7), 0x00FF00, 0xEF, INK_ADD, false);
     }
 
     if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL)
     {
-        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x + TO_FIXED(snolfEngine->horizShotPower), entity->position.y, 0xFF00FF, 0x7F, INK_ADD, false);
-        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x, entity->position.y + TO_FIXED(0 - snolfEngine->vertShotPower), 0x00FF00, 0x7F, INK_ADD, false);
+        Vector2 barDrawPos;
+        barDrawPos.x = entity->position.x - TO_FIXED(6);
+        barDrawPos.y = entity->position.y - TO_FIXED(60);
+        RSDK.DrawSprite(&snolfEngine->vertBarAnimator, &barDrawPos, false);
+        RSDK.DrawRect(entity->position.x - TO_FIXED(6), entity->position.y - TO_FIXED(60), TO_FIXED(9), TO_FIXED(0 - snolfEngine->vertShotPower), 0x00FF00, 0xEF, INK_ADD, false);
     }
 }

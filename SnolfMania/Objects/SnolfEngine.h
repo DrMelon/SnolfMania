@@ -32,6 +32,12 @@ typedef struct
     uint16 shotsFrames;
     Animator shotsTextAnimator;
 
+    uint16 horizBarFrames;
+    Animator horizBarAnimator;
+
+    uint16 vertBarFrames;
+    Animator vertBarAnimator;
+
 } SnolfEngine;
 
 #endif // SNOLF_ENGINE_H

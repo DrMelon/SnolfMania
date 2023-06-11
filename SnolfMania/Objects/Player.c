@@ -29,6 +29,8 @@ void Player_Create(void *data)
 
     self->snolfEngine.shotsFrames = RSDK.LoadSpriteAnimation("Global/SnolfHUD.bin", SCOPE_STAGE);
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 0, &self->snolfEngine.shotsTextAnimator, true, 0);
+    RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 1, &self->snolfEngine.horizBarAnimator, true, 0);
+    RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 2, &self->snolfEngine.vertBarAnimator, true, 0);
     self->snolfEngine.shotsTaken = 0;
 }
 
