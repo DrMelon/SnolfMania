@@ -13,13 +13,8 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     // Force player to be a ball.
     if (entity->state == Player_State_Ground)
     {
-        // entity->state = Player_State_Roll; // [SNOLF TODO] - Prevent Roll state from being able to unroll player. Custom roll state required? Likely. We don't want them to be able to jump normally either.
-        RSDK.SetSpriteAnimation(entity->aniFrames, ANI_JUMP, &entity->animator, false, 0);
-
-        entity->pushing = 0;
-        entity->state = Player_State_Roll;
-        if (entity->collisionMode == CMODE_FLOOR)
-            entity->position.y += entity->jumpOffset;
+        RSDK.PrintLog(0, "Player Roll in Snolf_Main");
+        Player_Action_Roll();
     }
 
     Snolf_UpdateShotLogic(player, entity, snolfEngine);
@@ -54,62 +49,89 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
 
     // Let's get a tasty sine wave from our accumulator.
     int32 sine = RSDK.Sin1024(snolfEngine->shotTimer);
+    int32 cosine = RSDK.Cos1024(snolfEngine->shotTimer);
 
     if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL)
     {
-        // [SNOLF TODO] Apply the sine wave to the shot.
+        snolfEngine->horizShotPower = (sine / 20);
     }
 
-    // Debug hack
-    snolfEngine->horizShotPower = 512;
-    snolfEngine->vertShotPower = 256;
+    if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL)
+    {
+        snolfEngine->vertShotPower = ((cosine / 2) + 512) / 20;
+    }
 }
 
 void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
     // Is player's ground speed below threshold, or are we in force-allow mode?
-    // if ((entity->groundVel <= TO_FIXED(64) || snolfEngine->forceAllow) && entity->onGround)
-    //{
-    // Not Snolfing yet; let's begin a new Snolf shot.
-    if (snolfEngine->currentShotState == SNOLF_SHOT_READY)
+    if ((abs(entity->groundVel) < 0x10000 || snolfEngine->forceAllow) && entity->onGround)
     {
-        snolfEngine->horizShotPower = 0;
-        snolfEngine->vertShotPower = 0;
-        snolfEngine->shotTimer = 0;
-        snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
-
-        // If player is facing left, adjust the accumulator so that it's partially through its cycle, so that the horiztonal shot starts moving left.
-        if ((entity->direction & FLIP_X) != 0)
+        // Not Snolfing yet; let's begin a new Snolf shot.
+        if (snolfEngine->currentShotState == SNOLF_SHOT_READY)
         {
-            snolfEngine->shotTimer = 256;
+            snolfEngine->horizShotPower = 0;
+            snolfEngine->vertShotPower = 0;
+            snolfEngine->shotTimer = 0;
+            snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
+
+            // If player is facing left, adjust the accumulator so that it's partially through its cycle, so that the horiztonal shot starts moving left.
+            if ((entity->direction & FLIP_X) != 0 || entity->left)
+            {
+                snolfEngine->shotTimer = 512;
+            }
+            if (entity->right)
+            {
+                snolfEngine->shotTimer = 0;
+            }
+
+            // [SNOLF TODO] Spawn UI shot meter elements.
+            RSDK.PrintLog(PRINT_NORMAL, "Starting a Snolf!");
         }
+        else if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL) // Horizontal Shot locked in - let's move to vertical!
+        {
+            // [SNOLF TODO] Play SFX.
+            RSDK.PrintLog(PRINT_NORMAL, "Horizontal strength locked in at %d!", snolfEngine->horizShotPower);
+            snolfEngine->shotTimer = 512; // Start partway through the cycle.
+            snolfEngine->currentShotState = SNOLF_SHOT_VERTICAL;
 
-        // [SNOLF TODO] Spawn UI elements.
-        RSDK.PrintLog(PRINT_NORMAL, "Starting a Snolf!");
+            // [SNOLF TODO] Reset UI elements for vertical mode.
+        }
+        else if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL) // Vertical Shot locked in - Snolf that ball!!
+        {
+            RSDK.PrintLog(PRINT_NORMAL, "Vertical strength locked in at %d!", snolfEngine->vertShotPower);
+
+            // [SNOLF TODO] Play SFX.
+            snolfEngine->currentShotState = SNOLF_SHOT_READY;
+
+            // Force the player into the air.
+            entity->state = Player_State_Air;
+            entity->onGround = false;
+
+            // Ptchoo!
+            entity->velocity.x = TO_FIXED(snolfEngine->horizShotPower);
+            entity->velocity.y = TO_FIXED(0 - snolfEngine->vertShotPower);
+            // Force groundVel to a non-zero number; this helps inform the physics engine.
+            entity->groundVel = (entity->velocity.x < 0) ? -TO_FIXED(4) : TO_FIXED(4);
+            entity->applyJumpCap = false;
+
+            // [SNOLF TODO] Hide UI elements.
+
+            RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
+        }
     }
-    else if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL) // Horizontal Shot locked in - let's move to vertical!
+}
+
+void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
+{
+    if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL)
     {
-        // [SNOLF TODO] Play SFX.
-        RSDK.PrintLog(PRINT_NORMAL, "Horizontal strength locked in at %d!", snolfEngine->horizShotPower);
-        snolfEngine->shotTimer = 0;
-        snolfEngine->currentShotState = SNOLF_SHOT_VERTICAL;
+        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x + TO_FIXED(snolfEngine->horizShotPower), entity->position.y, 0x00FF00, 0x7F, INK_ADD, false);
     }
-    else if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL) // Vertical Shot locked in - Snolf that ball!!
+
+    if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL)
     {
-        RSDK.PrintLog(PRINT_NORMAL, "Vertical strength locked in at %d!", snolfEngine->vertShotPower);
-
-        // [SNOLF TODO] Play SFX.
-        snolfEngine->currentShotState = SNOLF_SHOT_READY;
-
-        // Force the player into the air.
-        entity->state = Player_State_Air;
-
-        // Ptchoo!
-        entity->velocity.x = TO_FIXED(snolfEngine->horizShotPower / 20);
-        entity->velocity.y = TO_FIXED((0 - snolfEngine->vertShotPower) / 20);
-        entity->groundVel = 400;
-
-        RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
+        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x + TO_FIXED(snolfEngine->horizShotPower), entity->position.y, 0xFF00FF, 0x7F, INK_ADD, false);
+        RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x, entity->position.y + TO_FIXED(0 - snolfEngine->vertShotPower), 0x00FF00, 0x7F, INK_ADD, false);
     }
-    //}
 }

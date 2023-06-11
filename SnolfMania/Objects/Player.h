@@ -506,15 +506,42 @@ typedef struct
 
 } EntityPlayer;
 
+typedef struct
+{
+    RSDK_ENTITY
+    StateMachine(state);
+} EntityDust;
+
 // Object Struct
 extern ObjectPlayer *Player;
+extern EntityDust *Dust;
 
 // States
 extern StateMachine(Player_State_Ground);
 extern StateMachine(Player_State_Roll);
 extern StateMachine(Player_State_Air);
+extern StateMachine(Player_State_Crouch);
+extern StateMachine(Player_State_LookUp);
+extern StateMachine(Player_State_TubeRoll);
 
+extern StateMachine(Dust_State_DustTrail);
+
+// External functions
+extern void (*Player_Action_Jump)(EntityPlayer *entity);
+extern void (*Player_Action_Roll)();
+extern void (*Player_HandleAirMovement)();
+extern void (*Player_HandleGroundRotation)();
+extern void (*Player_HandleGroundMovement)();
+extern void (*Player_HandleGroundAnimation)();
+extern void (*Player_Gravity_False)();
+
+// Override Functions
 void Player_Update(void);
+void Player_Draw(void);
+bool32 Player_State_Ground_Snolfed(bool32 skipped);
+bool32 Player_State_Roll_Snolfed(bool32 skipped);
+void Player_HandleRollDeceleration_Snolfed(void);
+void Player_HandleGroundAnimation_Snolfed(void);
 
 // Additional Functions
 void Snolf_EnsureInfiniteLives(void);

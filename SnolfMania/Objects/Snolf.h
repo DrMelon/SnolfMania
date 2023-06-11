@@ -15,4 +15,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 // and then finally launching the player.
 void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
 
+// This function handles any UI that needs drawn.
+void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
+
 #endif // SNOLF_H
