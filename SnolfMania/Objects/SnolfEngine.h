@@ -26,6 +26,12 @@ typedef struct
 
     bool32 forceAllow;
 
+    int32 shotsTaken;
+    int32 shotsTakenTotal;
+
+    uint16 shotsFrames;
+    Animator shotsTextAnimator;
+
 } SnolfEngine;
 
 #endif // SNOLF_ENGINE_H

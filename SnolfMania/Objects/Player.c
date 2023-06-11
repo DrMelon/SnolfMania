@@ -26,6 +26,10 @@ void Player_Create(void *data)
     RSDK_THIS(Player);
 
     Mod.Super(self->classID, SUPER_CREATE, NULL);
+
+    self->snolfEngine.shotsFrames = RSDK.LoadSpriteAnimation("Global/SnolfHUD.bin", SCOPE_STAGE);
+    RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 0, &self->snolfEngine.shotsTextAnimator, true, 0);
+    self->snolfEngine.shotsTaken = 0;
 }
 
 // Player draw function. Runs on render.
@@ -36,6 +40,13 @@ void Player_Draw()
     Mod.Super(Player->classID, SUPER_DRAW, NULL);
 
     Snolf_Draw(Player, self, &self->snolfEngine);
+}
+
+void Player_StageLoad()
+{
+    RSDK_THIS(Player);
+
+    Mod.Super(Player->classID, SUPER_STAGELOAD, NULL);
 }
 
 // Overriding the player's ground state; we want to prevent the player from taking actions like jumping or spindashing.
@@ -141,7 +152,6 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
 // So, we add a lot of checks to see if self->controlLock is set.
 bool32 Player_State_Roll_Snolfed(bool32 skipped)
 {
-    RSDK.PrintLog(0, "Player_State_Roll_Snolfed");
     RSDK_THIS(Player);
     Player_HandleGroundRotation();
     // Player_HandleRollDeceleration();
@@ -178,9 +188,92 @@ bool32 Player_State_Roll_Snolfed(bool32 skipped)
     return true; // Skip original ground code.
 }
 
+bool32 Player_State_Air_Snolfed(bool32 skipped)
+{
+    RSDK_THIS(Player);
+
+#if GAME_VERSION != VER_100
+    self->tileCollisions = TILECOLLISION_DOWN;
+#endif
+    Player_HandleAirFriction_Snolfed();
+
+    if (self->onGround)
+    {
+        self->state = Player_State_Ground;
+
+        // Player_Gravity_False segfaulting for some reason. It's only 3 lines long, so i'll expand it here.
+        // Player_Gravity_False();
+        if (self->camera)
+        {
+            self->camera->disableYOffset = false;
+        }
+        self->jumpAbilityState = 0;
+    }
+    else
+    {
+        Player_HandleAirMovement();
+        self->nextGroundState = Player_State_Ground;
+
+        if (self->velocity.y > 0)
+        {
+            if (self->animator.animationID >= ANI_SPRING_TWIRL)
+            {
+                if (self->animator.animationID <= ANI_SPRING_DIAGONAL)
+                {
+                    RSDK.SetSpriteAnimation(self->aniFrames, self->animationReserve, &self->animator, false, 0);
+                }
+                else if (self->animator.animationID == ANI_SPRING_CS && !self->animator.frameID)
+                {
+                    RSDK.SetSpriteAnimation(self->aniFrames, ANI_AIR_WALK, &self->animator, false, 0);
+                }
+            }
+        }
+
+        switch (self->animator.animationID)
+        {
+        case ANI_IDLE:
+        case ANI_WALK:
+            if (self->animator.speed < 64)
+                self->animator.speed = 64;
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_AIR_WALK, &self->animator, false, self->animator.frameID);
+            break;
+
+        case ANI_LOOK_UP:
+        case ANI_CROUCH:
+        case ANI_SKID_TURN:
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_AIR_WALK, &self->animator, false, 0);
+            break;
+
+        case ANI_JOG:
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_AIR_WALK, &self->animator, false, 0);
+            break;
+
+        case ANI_JUMP:
+            if (self->velocity.y >= self->jumpCap)
+                StateMachine_Run(self->stateAbility);
+            break;
+
+        case ANI_SKID:
+            if (self->skidding <= 0)
+                RSDK.SetSpriteAnimation(self->aniFrames, ANI_AIR_WALK, &self->animator, false, self->animator.frameID);
+            else
+                self->skidding--;
+            break;
+
+        case ANI_SPINDASH:
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_JUMP, &self->animator, false, 0);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return true; // Skip original air code.
+}
+
 void Player_HandleRollDeceleration_Snolfed()
 {
-    RSDK.PrintLog(0, "Player_HandleRollDeceleration_Snolfed");
     RSDK_THIS(Player);
 
     int32 initialVel = self->groundVel;
@@ -482,10 +575,38 @@ void Player_HandleGroundAnimation_Snolfed()
     }
 }
 
+// In Snolf, the player cannot control themselves in the air!
+void Player_HandleAirFriction_Snolfed()
+{
+    RSDK_THIS(Player);
+
+    if (self->velocity.y > -0x40000 && self->velocity.y < 0)
+        self->velocity.x -= self->velocity.x >> 5;
+
+    // No air controls for YOU, buddy! Hide the effect of each direction behind self->controlLock checks.
+    // NOTE: We must allow the player to move in the air if they don't have the rolled animation - so that springs don't result in softlocks.
+    if (self->left)
+    {
+        if (self->velocity.x > -self->topSpeed && (self->controlLock || self->animator.animationID != ANI_JUMP))
+            self->velocity.x -= self->airAcceleration;
+
+        self->direction = FLIP_X;
+    }
+
+    if (self->right)
+    {
+        if (self->velocity.x < self->topSpeed && (self->controlLock || self->animator.animationID != ANI_JUMP))
+            self->velocity.x += self->airAcceleration;
+
+        self->direction = FLIP_NONE;
+    }
+}
+
 // In SNOLF, the Player has infinite lives.
 bool32 Snolf_EnsureInfiniteLives(bool32 skipped)
 {
     RSDK_THIS(Player);
+    self->snolfEngine.currentShotState = SNOLF_SHOT_READY;
 
     // Force lives to be at least 4 (which becomes 3 after death code finishes). Kinda weird to do it this way, but it's cleaner than modifying the whole death function.
     if (self->lives < 4)

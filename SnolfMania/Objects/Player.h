@@ -538,10 +538,14 @@ extern void (*Player_Gravity_False)();
 // Override Functions
 void Player_Update(void);
 void Player_Draw(void);
+void Player_Create(void *data);
+void Player_StageLoad(void);
 bool32 Player_State_Ground_Snolfed(bool32 skipped);
 bool32 Player_State_Roll_Snolfed(bool32 skipped);
+bool32 Player_State_Air_Snolfed(bool32 skipped);
 void Player_HandleRollDeceleration_Snolfed(void);
 void Player_HandleGroundAnimation_Snolfed(void);
+void Player_HandleAirFriction_Snolfed(void);
 
 // Additional Functions
 bool32 Snolf_EnsureInfiniteLives(bool32 skipped);

@@ -1,0 +1,83 @@
+{
+  "Anim Version": 5,
+  "Sheets": [
+    "Global/SnolfHUD.gif"
+  ],
+  "Animations": [
+    {
+      "Name": "Shots Text",
+      "Animation Speed": 0,
+      "Loop Index": 0,
+      "Rotation Flags": 0,
+      "Frames": [
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 0,
+            "y": 0
+          },
+          "Size": {
+            "w": 42,
+            "h": 14
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Power Meter H",
+      "Animation Speed": 0,
+      "Loop Index": 0,
+      "Rotation Flags": 0,
+      "Frames": [
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 0,
+            "y": 16
+          },
+          "Size": {
+            "w": 64,
+            "h": 12
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Power Meter V",
+      "Animation Speed": 0,
+      "Loop Index": 0,
+      "Rotation Flags": 0,
+      "Frames": [
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 64,
+            "y": 0
+          },
+          "Size": {
+            "w": 12,
+            "h": 44
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ]
+}

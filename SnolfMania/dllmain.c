@@ -18,8 +18,6 @@ void (*Player_Action_Roll)();
 void (*Player_HandleAirMovement)();
 void (*Player_HandleGroundRotation)();
 void (*Player_HandleGroundMovement)();
-// void (*Player_HandleGroundAnimation)();
-// void (*Player_Gravity_False)();
 
 StateMachine(Player_State_Ground);
 StateMachine(Player_State_Roll);
@@ -42,6 +40,7 @@ void InitModAPI(void)
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Death"), Snolf_EnsureInfiniteLives, false);
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Ground"), Player_State_Ground_Snolfed, true);
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Roll"), Player_State_Roll_Snolfed, true);
+    Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Air"), Player_State_Air_Snolfed, true);
 
     // [SNOLF TODO] Get existing public functions.
     // e.g, Player_JumpAbility_Sonic = Mod.GetPublicFunction(NULL, "Player_JumpAbility_Sonic");
@@ -57,8 +56,6 @@ void InitModAPI(void)
     Player_HandleAirMovement = Mod.GetPublicFunction(NULL, "Player_HandleAirMovement");
     Player_HandleGroundRotation = Mod.GetPublicFunction(NULL, "Player_HandleGroundRotation");
     Player_HandleGroundMovement = Mod.GetPublicFunction(NULL, "Player_HandleGroundMovement");
-    // Player_HandleGroundAnimation = Mod.GetPublicFunction(NULL, "Player_HandleGroundAnimation");
-    // Player_Gravity_False = Mod.GetPublicFunction(NULL, "Player_Gravity_False");
 
     Dust_State_DustTrail = Mod.GetPublicFunction(NULL, "Dust_State_DustTrail");
 
@@ -67,9 +64,11 @@ void InitModAPI(void)
     ADD_PUBLIC_FUNC(Player_State_Roll_Snolfed);
     ADD_PUBLIC_FUNC(Player_HandleRollDeceleration_Snolfed);
 
+    ADD_PUBLIC_FUNC(Player_HandleAirFriction_Snolfed);
+
     // [SNOLF TODO] Use macros to inject custom code and overload functions from base game.
     MOD_REGISTER_OBJECT_HOOK(Player);
-    MOD_REGISTER_OBJ_OVERLOAD(Player, Player_Update, NULL, NULL, Player_Draw, NULL, NULL, NULL, NULL, NULL);
+    MOD_REGISTER_OBJ_OVERLOAD(Player, Player_Update, NULL, NULL, Player_Draw, Player_Create, Player_StageLoad, NULL, NULL, NULL);
 }
 
 #if RETRO_USE_MOD_LOADER

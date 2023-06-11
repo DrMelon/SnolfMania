@@ -13,7 +13,6 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     // Force player to be a ball.
     if (entity->state == Player_State_Ground)
     {
-        RSDK.PrintLog(0, "Player Roll in Snolf_Main");
         Player_Action_Roll();
     }
 
@@ -127,6 +126,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             // [SNOLF TODO] Hide UI elements.
 
+            snolfEngine->shotsTaken++;
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
         }
     }
@@ -134,6 +134,19 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
 void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
+    // Is this player a CPU follower? Don't show their UI if so.
+    if (entity->sidekick)
+    {
+        return;
+    }
+
+    // Draw "Shots" text and count.
+    Vector2 shotsDrawPos;
+    shotsDrawPos.x = TO_FIXED(16);
+    shotsDrawPos.y = TO_FIXED(64);
+    RSDK.DrawSprite(&snolfEngine->shotsTextAnimator, &shotsDrawPos, true);
+
+    // Draw Meters
     if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL)
     {
         RSDK.DrawLine(entity->position.x, entity->position.y, entity->position.x + TO_FIXED(snolfEngine->horizShotPower), entity->position.y, 0x00FF00, 0x7F, INK_ADD, false);
