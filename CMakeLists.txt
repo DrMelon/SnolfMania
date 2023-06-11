@@ -9,6 +9,7 @@ add_library(SnolfMania SHARED
     GameAPI/C/GameAPI/Game.c
     ${MOD_NAME}/dllmain.c
     ${MOD_NAME}/Objects/Player.c
+    ${MOD_NAME}/Objects/Snolf.c
 )
 
 target_include_directories(SnolfMania PRIVATE

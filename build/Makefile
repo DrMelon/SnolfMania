@@ -177,6 +177,30 @@ SnolfMania/Objects/Player.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.s
 .PHONY : SnolfMania/Objects/Player.c.s
 
+SnolfMania/Objects/Snolf.obj: SnolfMania/Objects/Snolf.c.obj
+.PHONY : SnolfMania/Objects/Snolf.obj
+
+# target to build an object file
+SnolfMania/Objects/Snolf.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.obj
+.PHONY : SnolfMania/Objects/Snolf.c.obj
+
+SnolfMania/Objects/Snolf.i: SnolfMania/Objects/Snolf.c.i
+.PHONY : SnolfMania/Objects/Snolf.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Snolf.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.i
+.PHONY : SnolfMania/Objects/Snolf.c.i
+
+SnolfMania/Objects/Snolf.s: SnolfMania/Objects/Snolf.c.s
+.PHONY : SnolfMania/Objects/Snolf.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Snolf.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.s
+.PHONY : SnolfMania/Objects/Snolf.c.s
+
 SnolfMania/dllmain.obj: SnolfMania/dllmain.c.obj
 .PHONY : SnolfMania/dllmain.obj
 
@@ -216,6 +240,9 @@ help:
 	@echo "... SnolfMania/Objects/Player.obj"
 	@echo "... SnolfMania/Objects/Player.i"
 	@echo "... SnolfMania/Objects/Player.s"
+	@echo "... SnolfMania/Objects/Snolf.obj"
+	@echo "... SnolfMania/Objects/Snolf.i"
+	@echo "... SnolfMania/Objects/Snolf.s"
 	@echo "... SnolfMania/dllmain.obj"
 	@echo "... SnolfMania/dllmain.i"
 	@echo "... SnolfMania/dllmain.s"

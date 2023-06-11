@@ -2,6 +2,7 @@
 #define OBJ_PLAYER_H
 
 #include "GameAPI/Game.h"
+#include "SnolfEngine.h"
 
 // Helper Constants
 #define PLAYER_PALETTE_INDEX_SONIC_OLD (2) // sonic's original palette indices, here for legacy reasons. Only exists in a few places in the final game.
@@ -500,12 +501,19 @@ typedef struct
 #if MANIA_USE_PLUS
     int32 uncurlTimer;
 #endif
+    int32 newNumberStuff;
+    SnolfEngine snolfEngine;
+
 } EntityPlayer;
 
 // Object Struct
 extern ObjectPlayer *Player;
 
 // States
+extern StateMachine(Player_State_Ground);
+extern StateMachine(Player_State_Roll);
+extern StateMachine(Player_State_Air);
+
 void Player_Update(void);
 
 // Additional Functions

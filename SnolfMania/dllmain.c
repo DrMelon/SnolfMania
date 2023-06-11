@@ -12,6 +12,10 @@ DLLExport bool32 LinkModLogic(EngineInfo *info, const char *id);
 #define ADD_PUBLIC_FUNC(func) Mod.AddPublicFunction(#func, (void *)(func))
 #endif
 
+StateMachine(Player_State_Ground);
+StateMachine(Player_State_Roll);
+StateMachine(Player_State_Air);
+
 void InitModAPI(void)
 {
 
@@ -25,6 +29,9 @@ void InitModAPI(void)
 
     // [SNOLF TODO] Get existing public functions.
     // e.g, Player_JumpAbility_Sonic = Mod.GetPublicFunction(NULL, "Player_JumpAbility_Sonic");
+    Player_State_Roll = Mod.GetPublicFunction(NULL, "Player_State_Roll");
+    Player_State_Ground = Mod.GetPublicFunction(NULL, "Player_State_Ground");
+    Player_State_Air = Mod.GetPublicFunction(NULL, "Player_State_Air");
 
     // [SNOLF TODO] Register new functions with ADD_PUBLIC_FUNC.
     // Something like...
