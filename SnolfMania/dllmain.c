@@ -1,6 +1,7 @@
 #include "../GameAPI/C/GameAPI/Game.h"
 #include "Objects/Player.h"
 #include "Objects/HUD.h"
+#include "Objects/Zone.h"
 #include "ModConfig.h"
 
 // [SNOLF TODO] Includes
@@ -71,6 +72,7 @@ void InitModAPI(void)
 
     // [SNOLF TODO] Use macros to inject custom code and overload functions from base game.
     MOD_REGISTER_OBJECT_HOOK(Player);
+    MOD_REGISTER_OBJECT_HOOK(Zone);
     MOD_REGISTER_OBJ_OVERLOAD(Player, Player_Update, NULL, NULL, Player_Draw, Player_Create, Player_StageLoad, NULL, NULL, NULL);
     MOD_REGISTER_OBJ_OVERLOAD(HUD, NULL, NULL, NULL, HUD_Draw, NULL, NULL, NULL, NULL, NULL);
 }
