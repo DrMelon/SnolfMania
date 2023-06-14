@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "HUD.h"
 #include "Snolf.h"
+#include "Zone.h"
 
 void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
@@ -10,6 +11,16 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     {
         return;
     }
+
+    // See if forced Snolfing should be allowed (e.g, if an Autoscroller has started.)
+    RSDK_GET_ENTITY(SLOT_ZONE, Zone); 
+    snolfEngine->forceAllow = false;
+    if(Zone->autoScrollSpeed)
+    {
+        snolfEngine->forceAllow = true;
+    }
+
+
 
     // Force player to be a ball.
     if (entity->state == Player_State_Ground)
@@ -105,7 +116,6 @@ void Snolf_ResetShot(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *sn
     entity->velocity.y = 0;
     entity->groundVel = 0;
 
-    // [SNOLF TODO] Play SFX
     if (!entity->sidekick)
     {
         RSDK.PlaySfx(snolfEngine->sfxResetShot, false, 255);
@@ -140,7 +150,6 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
                 RSDK.PlaySfx(snolfEngine->sfxStartSnolf, false, 255);
             }
 
-            // [SNOLF TODO] Spawn UI shot meter elements.
             RSDK.PrintLog(PRINT_NORMAL, "Starting a Snolf!");
         }
         else if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL) // Horizontal Shot locked in - let's move to vertical!
@@ -154,13 +163,11 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             snolfEngine->shotTimer = 127; // Start partway through the cycle.
             snolfEngine->currentShotState = SNOLF_SHOT_VERTICAL;
 
-            // [SNOLF TODO] Reset UI elements for vertical mode.
         }
         else if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL) // Vertical Shot locked in - Snolf that ball!!
         {
             RSDK.PrintLog(PRINT_NORMAL, "Vertical strength locked in at %d!", snolfEngine->vertShotPower);
 
-            // [SNOLF TODO] Play SFX.
             if (!entity->sidekick)
             {
                 RSDK.PlaySfx(snolfEngine->sfxLaunchSnolf, false, 255);
@@ -177,8 +184,6 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             // Force groundVel to a non-zero number; this helps inform the physics engine.
             entity->groundVel = (entity->velocity.x < 0) ? -TO_FIXED(4) : TO_FIXED(4);
             entity->applyJumpCap = false;
-
-            // [SNOLF TODO] Hide UI elements.
 
             snolfEngine->shotsTaken++;
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");

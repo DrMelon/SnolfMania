@@ -153,6 +153,102 @@ GameAPI/C/GameAPI/Game.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/GameAPI/C/GameAPI/Game.c.s
 .PHONY : GameAPI/C/GameAPI/Game.c.s
 
+SnolfMania/Objects/HUD.o: SnolfMania/Objects/HUD.c.o
+.PHONY : SnolfMania/Objects/HUD.o
+
+# target to build an object file
+SnolfMania/Objects/HUD.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.o
+.PHONY : SnolfMania/Objects/HUD.c.o
+
+SnolfMania/Objects/HUD.i: SnolfMania/Objects/HUD.c.i
+.PHONY : SnolfMania/Objects/HUD.i
+
+# target to preprocess a source file
+SnolfMania/Objects/HUD.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.i
+.PHONY : SnolfMania/Objects/HUD.c.i
+
+SnolfMania/Objects/HUD.s: SnolfMania/Objects/HUD.c.s
+.PHONY : SnolfMania/Objects/HUD.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/HUD.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/HUD.c.s
+.PHONY : SnolfMania/Objects/HUD.c.s
+
+SnolfMania/Objects/Player.o: SnolfMania/Objects/Player.c.o
+.PHONY : SnolfMania/Objects/Player.o
+
+# target to build an object file
+SnolfMania/Objects/Player.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.o
+.PHONY : SnolfMania/Objects/Player.c.o
+
+SnolfMania/Objects/Player.i: SnolfMania/Objects/Player.c.i
+.PHONY : SnolfMania/Objects/Player.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Player.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.i
+.PHONY : SnolfMania/Objects/Player.c.i
+
+SnolfMania/Objects/Player.s: SnolfMania/Objects/Player.c.s
+.PHONY : SnolfMania/Objects/Player.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Player.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Player.c.s
+.PHONY : SnolfMania/Objects/Player.c.s
+
+SnolfMania/Objects/Snolf.o: SnolfMania/Objects/Snolf.c.o
+.PHONY : SnolfMania/Objects/Snolf.o
+
+# target to build an object file
+SnolfMania/Objects/Snolf.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.o
+.PHONY : SnolfMania/Objects/Snolf.c.o
+
+SnolfMania/Objects/Snolf.i: SnolfMania/Objects/Snolf.c.i
+.PHONY : SnolfMania/Objects/Snolf.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Snolf.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.i
+.PHONY : SnolfMania/Objects/Snolf.c.i
+
+SnolfMania/Objects/Snolf.s: SnolfMania/Objects/Snolf.c.s
+.PHONY : SnolfMania/Objects/Snolf.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Snolf.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.s
+.PHONY : SnolfMania/Objects/Snolf.c.s
+
+SnolfMania/Objects/Zone.o: SnolfMania/Objects/Zone.c.o
+.PHONY : SnolfMania/Objects/Zone.o
+
+# target to build an object file
+SnolfMania/Objects/Zone.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.o
+.PHONY : SnolfMania/Objects/Zone.c.o
+
+SnolfMania/Objects/Zone.i: SnolfMania/Objects/Zone.c.i
+.PHONY : SnolfMania/Objects/Zone.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Zone.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.i
+.PHONY : SnolfMania/Objects/Zone.c.i
+
+SnolfMania/Objects/Zone.s: SnolfMania/Objects/Zone.c.s
+.PHONY : SnolfMania/Objects/Zone.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Zone.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.s
+.PHONY : SnolfMania/Objects/Zone.c.s
+
 SnolfMania/dllmain.o: SnolfMania/dllmain.c.o
 .PHONY : SnolfMania/dllmain.o
 
@@ -189,6 +285,18 @@ help:
 	@echo "... GameAPI/C/GameAPI/Game.o"
 	@echo "... GameAPI/C/GameAPI/Game.i"
 	@echo "... GameAPI/C/GameAPI/Game.s"
+	@echo "... SnolfMania/Objects/HUD.o"
+	@echo "... SnolfMania/Objects/HUD.i"
+	@echo "... SnolfMania/Objects/HUD.s"
+	@echo "... SnolfMania/Objects/Player.o"
+	@echo "... SnolfMania/Objects/Player.i"
+	@echo "... SnolfMania/Objects/Player.s"
+	@echo "... SnolfMania/Objects/Snolf.o"
+	@echo "... SnolfMania/Objects/Snolf.i"
+	@echo "... SnolfMania/Objects/Snolf.s"
+	@echo "... SnolfMania/Objects/Zone.o"
+	@echo "... SnolfMania/Objects/Zone.i"
+	@echo "... SnolfMania/Objects/Zone.s"
 	@echo "... SnolfMania/dllmain.o"
 	@echo "... SnolfMania/dllmain.i"
 	@echo "... SnolfMania/dllmain.s"
