@@ -515,6 +515,7 @@ typedef struct
 // Object Struct
 extern ObjectPlayer *Player;
 extern EntityDust *Dust;
+extern int32 backupShotsTaken;
 
 // States
 extern StateMachine(Player_State_Ground);

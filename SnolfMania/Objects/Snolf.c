@@ -7,20 +7,18 @@
 void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
     // Bail if controls are locked (e.g, cutscene)
-    if (entity->controlLock)
+    if (entity->stateInput == StateMachine_None)
     {
         return;
     }
 
     // See if forced Snolfing should be allowed (e.g, if an Autoscroller has started.)
-    RSDK_GET_ENTITY(SLOT_ZONE, Zone); 
+    RSDK_GET_ENTITY(SLOT_ZONE, Zone);
     snolfEngine->forceAllow = false;
-    if(Zone->autoScrollSpeed)
+    if (Zone->autoScrollSpeed)
     {
         snolfEngine->forceAllow = true;
     }
-
-
 
     // Force player to be a ball.
     if (entity->state == Player_State_Ground)
@@ -42,6 +40,11 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     }
 
     Snolf_UpdateShotLogic(player, entity, snolfEngine);
+
+    if (snolfEngine->isSpinShot)
+    {
+        entity->animator.speed = 30 + (abs(snolfEngine->spinPower * 30));
+    }
 }
 
 void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
@@ -110,35 +113,35 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
 
 void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
-    // Player is trying to set spin. 
-    
+    // Player is trying to set spin.
+
     // Handle button presses.
-    if(entity->right && !snolfEngine->wasRight)
+    if (entity->right && !snolfEngine->wasRight)
     {
         snolfEngine->spinPower++;
 
-        if(snolfEngine->spinPower > 0) 
+        if (snolfEngine->spinPower > 0)
         {
             entity->direction = FLIP_NONE;
         }
 
-        if(snolfEngine->spinPower > 3)
+        if (snolfEngine->spinPower > 3)
         {
             snolfEngine->spinPower = 3;
         }
 
         RSDK.PlaySfx(snolfEngine->sfxLockHoriz, false, 255);
     }
-    if(entity->left && !snolfEngine->wasLeft)
+    if (entity->left && !snolfEngine->wasLeft)
     {
         snolfEngine->spinPower--;
 
-        if(snolfEngine->spinPower < 0)
+        if (snolfEngine->spinPower < 0)
         {
             entity->direction = FLIP_X;
         }
-        
-        if(snolfEngine->spinPower < -3)
+
+        if (snolfEngine->spinPower < -3)
         {
             snolfEngine->spinPower = -3;
         }
@@ -147,11 +150,10 @@ void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfE
     }
 
     entity->animator.speed = 30 + (abs(snolfEngine->spinPower * 30));
-    
+
     snolfEngine->wasLeft = entity->left;
     snolfEngine->wasRight = entity->right;
 }
-
 
 void Snolf_ResetShot(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
@@ -177,6 +179,12 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
     // Is player's ground speed below threshold, or are we in force-allow mode?
     if ((abs(entity->groundVel) < 0x10000 || snolfEngine->forceAllow))
     {
+        // Is the player currently using an air ability? If so, don't Snolf!
+        if (entity->animator.animationID != ANI_JUMP && entity->animator.animationID != ANI_DROPDASH)
+        {
+            return;
+        }
+
         // Not Snolfing yet; let's begin a new Snolf shot.
         if (snolfEngine->currentShotState == SNOLF_SHOT_READY)
         {
@@ -186,7 +194,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             snolfEngine->isSpinShot = false;
 
             // Player is holding down, and is Sonic... set that spin!
-            if(entity->down && entity->characterID == ID_SONIC)
+            if (entity->down && entity->characterID == ID_SONIC)
             {
                 snolfEngine->currentShotState = SNOLF_SHOT_SET_SPIN;
                 snolfEngine->isSpinShot = true;
@@ -229,7 +237,6 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             RSDK.PrintLog(PRINT_NORMAL, "Horizontal strength locked in at %d!", snolfEngine->horizShotPower);
             snolfEngine->shotTimer = 127; // Start partway through the cycle.
             snolfEngine->currentShotState = SNOLF_SHOT_VERTICAL;
-
         }
         else if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL) // Vertical Shot locked in - Snolf that ball!!
         {
@@ -237,7 +244,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             if (!entity->sidekick)
             {
-                if(!snolfEngine->isSpinShot)
+                if (!snolfEngine->isSpinShot)
                 {
                     RSDK.PlaySfx(snolfEngine->sfxLaunchSnolf, false, 255);
                 }
@@ -260,14 +267,21 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             entity->applyJumpCap = false;
 
             snolfEngine->shotsTaken++;
+            backupShotsTaken = entity->snolfEngine.shotsTaken;
+
+            // Allow non-Sonic characters to use their air abilities.
+            if (entity->characterID != ID_SONIC)
+            {
+                entity->jumpAbilityState = 1;
+            }
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
         }
-        else if(snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
+        else if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
         {
             snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
             snolfEngine->shotTimer = 0;
 
-            if(snolfEngine->spinPower == 0)
+            if (snolfEngine->spinPower == 0)
             {
                 snolfEngine->isSpinShot = false;
                 RSDK.SetSpriteAnimation(entity->aniFrames, ANI_JUMP, &entity->animator, true, 0);
@@ -320,7 +334,7 @@ void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
         barDrawPos.x = entity->position.x - TO_FIXED(6);
         barDrawPos.y = entity->position.y - TO_FIXED(60);
 
-        float vectorBarLength = ((float)snolfEngine->vertShotPower / 256.0f) * 38.0f;
+        float vectorBarLength = ((float)snolfEngine->vertShotPower / 256.0f) * 40.0f;
         int32 vectorBarLen = (int)vectorBarLength;
 
         RSDK.DrawSprite(&snolfEngine->vertBarAnimator, &barDrawPos, false);
@@ -329,6 +343,24 @@ void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
 
     if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
     {
-        // TODO: Show Spin chevrons.
+        Vector2 drawChevronPos;
+        drawChevronPos.x = entity->position.x - TO_FIXED(4);
+        drawChevronPos.y = entity->position.y - TO_FIXED(16);
+        snolfEngine->chevRAnimator.frameID = 0;
+        snolfEngine->chevLAnimator.frameID = 0;
+
+        if (snolfEngine->spinPower > 0)
+        {
+            snolfEngine->chevRAnimator.frameID = abs(snolfEngine->spinPower);
+        }
+        if (snolfEngine->spinPower < 0)
+        {
+            snolfEngine->chevLAnimator.frameID = abs(snolfEngine->spinPower);
+        }
+
+        drawChevronPos.x += TO_FIXED(12);
+        RSDK.DrawSprite(&snolfEngine->chevRAnimator, &drawChevronPos, false);
+        drawChevronPos.x -= TO_FIXED(24);
+        RSDK.DrawSprite(&snolfEngine->chevLAnimator, &drawChevronPos, false);
     }
 }

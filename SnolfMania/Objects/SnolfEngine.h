@@ -39,6 +39,8 @@ typedef struct
     Animator shotsTextAnimator;
     Animator horizBarAnimator;
     Animator vertBarAnimator;
+    Animator chevRAnimator;
+    Animator chevLAnimator;
 
     uint16 sfxStartSnolf;
     uint16 sfxLockHoriz;

@@ -78,6 +78,158 @@
           }
         }
       ]
+    },
+    {
+      "Name": "Chev_R",
+      "Animation Speed": 0,
+      "Loop Index": 0,
+      "Rotation Flags": 0,
+      "Frames": [
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 1,
+            "y": 29
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 1,
+            "y": 40
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 1,
+            "y": 51
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 1,
+            "y": 62
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Chev_L",
+      "Animation Speed": 0,
+      "Loop Index": 0,
+      "Rotation Flags": 0,
+      "Frames": [
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 9,
+            "y": 29
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 9,
+            "y": 40
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 9,
+            "y": 51
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "SheetID": 0,
+          "ID": 0,
+          "Duration": 0,
+          "Src": {
+            "x": 9,
+            "y": 62
+          },
+          "Size": {
+            "w": 7,
+            "h": 10
+          },
+          "Pivot": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
     }
   ]
 }

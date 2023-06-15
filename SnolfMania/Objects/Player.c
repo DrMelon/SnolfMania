@@ -2,12 +2,14 @@
 #include "GameAPI/GameLink.h"
 
 #include "Player.h"
+#include "Starpost.h"
 #include "Snolf.h"
 #include "SnolfEngine.h"
 #include "../ModConfig.h"
 
 ObjectPlayer *Player;
 EntityDust *Dust;
+int32 backupShotsTaken = 0;
 
 // Player update function. Runs every frame.
 void Player_Update()
@@ -20,7 +22,7 @@ void Player_Update()
     Snolf_Main(Player, self, &self->snolfEngine);
 }
 
-// Player creation function. Runs once.
+// Player creation function. Runs on player spawn.
 void Player_Create(void *data)
 {
     RSDK_THIS(Player);
@@ -31,7 +33,8 @@ void Player_Create(void *data)
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 0, &self->snolfEngine.shotsTextAnimator, true, 0);
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 1, &self->snolfEngine.horizBarAnimator, true, 0);
     RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 2, &self->snolfEngine.vertBarAnimator, true, 0);
-    self->snolfEngine.shotsTaken = 0;
+    RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 3, &self->snolfEngine.chevRAnimator, true, 0);
+    RSDK.SetSpriteAnimation(self->snolfEngine.shotsFrames, 4, &self->snolfEngine.chevLAnimator, true, 0);
 
     self->snolfEngine.sfxStartSnolf = RSDK.GetSfx("Global/MenuBleep.wav");
     self->snolfEngine.sfxLockHoriz = RSDK.GetSfx("Global/MenuBleep.wav");
@@ -47,23 +50,44 @@ void Player_Draw()
     RSDK_THIS(Player);
 
     Mod.Super(Player->classID, SUPER_DRAW, NULL);
-
-    // Snolf_Draw(Player, self, &self->snolfEngine);
 }
 
+// StageLoad function. Runs once when the stage is loaded.
 void Player_StageLoad()
 {
     RSDK_THIS(Player);
 
     Mod.Super(Player->classID, SUPER_STAGELOAD, NULL);
 
-    // After the stage loads, reset shots taken counter.
-    // self->snolfEngine.shotsTaken = 0;
+    // After the stage loads, reset shots taken counter, but only if this is a fresh stage (e.g, no starposts hit, no special stage)
+    bool32 wasReload = false;
+    if (globals->specialRingID)
+    {
+        wasReload = true;
+    }
+    if (StarPost)
+    {
+        for (int32 p = 0; p < Player->playerCount; ++p)
+        {
+            if (StarPost->postIDs[p])
+            {
+                wasReload = true;
+            }
+        }
+    }
+    if (!wasReload)
+    {
+        self->snolfEngine.shotsTaken = 0;
+    }
+    else
+    {
+        self->snolfEngine.shotsTaken = backupShotsTaken;
+    }
 }
 
 // Overriding the player's ground state; we want to prevent the player from taking actions like jumping or spindashing.
 // However, we can't just take the ground-state code *out*; it needs to work when the player is doing things like interacting with cutscenes.
-// So, we add a lot of checks to see if self->controlLock is set.
+// So, we add a lot of checks to see if self->stateInput is set to StateMachine_None
 bool32 Player_State_Ground_Snolfed(bool32 skipped)
 {
     RSDK_THIS(Player);
@@ -122,37 +146,46 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
         // Player_HandleGroundAnimation();
         Player_HandleGroundAnimation_Snolfed();
 
-        if (self->jumpPress && self->controlLock)
+        if (self->jumpPress && self->stateInput == StateMachine_None)
         {
             Player_Action_Jump(self);
             self->timer = 0;
         }
         else
         {
-            // if (self->groundVel)
-            //{
-            int32 minRollVel = self->state == Player_State_Crouch ? 0x11000 : 0x8800;
-            // if (abs(self->groundVel) >= minRollVel && !self->left && !self->right && self->down)
-            //{
-            Player_Action_Roll();
-            RSDK.PlaySfx(Player->sfxRoll, false, 255);
-            //}
-            //}
-            /*if (((self->angle < 0x20 || self->angle > 0xE0) && !self->collisionMode) || (self->invertGravity && self->angle == 0x80))
+            if (self->stateInput != StateMachine_None)
             {
-                if (self->up)
+                if (self->groundVel)
                 {
-                    RSDK.SetSpriteAnimation(self->aniFrames, ANI_LOOK_UP, &self->animator, true, 1);
-                    self->timer = 0;
-                    self->state = Player_State_LookUp;
+                    int32 minRollVel = self->state == Player_State_Crouch ? 0x11000 : 0x8800;
+                    if (abs(self->groundVel) >= minRollVel && !self->left && !self->right && self->down)
+                    {
+                        Player_Action_Roll();
+
+                        RSDK.PlaySfx(Player->sfxRoll, false, 255);
+                    }
                 }
-                else if (self->down)
+                if (((self->angle < 0x20 || self->angle > 0xE0) && !self->collisionMode) || (self->invertGravity && self->angle == 0x80))
                 {
-                    RSDK.SetSpriteAnimation(self->aniFrames, ANI_CROUCH, &self->animator, true, 1);
-                    self->timer = 0;
-                    self->state = Player_State_Crouch;
+                    if (self->up)
+                    {
+                        RSDK.SetSpriteAnimation(self->aniFrames, ANI_LOOK_UP, &self->animator, true, 1);
+                        self->timer = 0;
+                        self->state = Player_State_LookUp;
+                    }
+                    else if (self->down)
+                    {
+                        RSDK.SetSpriteAnimation(self->aniFrames, ANI_CROUCH, &self->animator, true, 1);
+                        self->timer = 0;
+                        self->state = Player_State_Crouch;
+                    }
                 }
-            }*/
+            }
+            else
+            {
+                Player_Action_Roll();
+                RSDK.PlaySfx(Player->sfxRoll, false, 255);
+            }
         }
     }
 
@@ -161,13 +194,13 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
 
 // Overriding the player's roll state; we want to prevent the player from taking actions like jumping.
 // However, we can't just take the ground-state code *out*; it needs to work when the player is doing things like interacting with cutscenes.
-// So, we add a lot of checks to see if self->controlLock is set.
+// So, we add a lot of checks to see if self->stateInput is set to StateMachine_None
 bool32 Player_State_Roll_Snolfed(bool32 skipped)
 {
     RSDK_THIS(Player);
 
     // Apply Spin Shot velocity on ground!
-    if(self->snolfEngine.isSpinShot && self->snolfEngine.spinPower != 0 && self->snolfEngine.currentShotState == SNOLF_SHOT_READY)
+    if (self->snolfEngine.isSpinShot && self->snolfEngine.spinPower != 0 && self->snolfEngine.currentShotState == SNOLF_SHOT_READY)
     {
         self->snolfEngine.isSpinShot = false;
 
@@ -204,7 +237,7 @@ bool32 Player_State_Roll_Snolfed(bool32 skipped)
         }
         self->jumpAbilityState = 0;
 
-        if (self->jumpPress && self->controlLock)
+        if (self->jumpPress && self->stateInput == StateMachine_None)
             Player_Action_Jump(self);
     }
 
@@ -214,8 +247,6 @@ bool32 Player_State_Roll_Snolfed(bool32 skipped)
 bool32 Player_State_Air_Snolfed(bool32 skipped)
 {
     RSDK_THIS(Player);
-
-
 
 #if GAME_VERSION != VER_100
     self->tileCollisions = TILECOLLISION_DOWN;
@@ -294,13 +325,13 @@ bool32 Player_State_Air_Snolfed(bool32 skipped)
         }
     }
 
-    if(self->snolfEngine.isSpinShot) 
+    if (self->snolfEngine.isSpinShot)
     {
-        if(self->snolfEngine.spinPower < 0)
+        if (self->snolfEngine.spinPower < 0)
         {
             self->direction = FLIP_X;
         }
-        if(self->snolfEngine.spinPower > 0)
+        if (self->snolfEngine.spinPower > 0)
         {
             self->direction = FLIP_NONE;
         }
@@ -371,7 +402,7 @@ void Player_HandleRollDeceleration_Snolfed()
             if ((self->groundVel >= 0 && initialVel <= 0) || (self->groundVel <= 0 && initialVel >= 0))
             {
                 self->groundVel = 0;
-                if (self->controlLock) // Only unroll from a ball in cutscenes.
+                if (self->stateInput == StateMachine_None) // Only unroll from a ball in cutscenes.
                 {
                     self->state = Player_State_Ground;
                 }
@@ -399,7 +430,7 @@ void Player_HandleRollDeceleration_Snolfed()
         {
             if ((self->groundVel >= 0 && initialVel <= 0) || (self->groundVel <= 0 && initialVel >= 0))
             {
-                if (self->controlLock) // Only unroll from a ball in cutscenes.
+                if (self->stateInput == StateMachine_None) // Only unroll from a ball in cutscenes.
                 {
                     self->groundVel = 0;
                     self->state = Player_State_Ground;
@@ -621,11 +652,11 @@ void Player_HandleAirFriction_Snolfed()
     if (self->velocity.y > -0x40000 && self->velocity.y < 0)
         self->velocity.x -= self->velocity.x >> 5;
 
-    // No air controls for YOU, buddy! Hide the effect of each direction behind self->controlLock checks.
+    // No air controls for YOU, buddy! Hide the effect of each direction behind self->stateInput checks.
     // NOTE: We must allow the player to move in the air if they don't have the rolled animation - so that springs don't result in softlocks.
     if (self->left)
     {
-        if (self->velocity.x > -self->topSpeed && (self->controlLock || self->animator.animationID != ANI_JUMP))
+        if (self->velocity.x > -self->topSpeed && (self->stateInput == StateMachine_None || self->animator.animationID != ANI_JUMP))
             self->velocity.x -= self->airAcceleration;
 
         self->direction = FLIP_X;
@@ -633,7 +664,7 @@ void Player_HandleAirFriction_Snolfed()
 
     if (self->right)
     {
-        if (self->velocity.x < self->topSpeed && (self->controlLock || self->animator.animationID != ANI_JUMP))
+        if (self->velocity.x < self->topSpeed && (self->stateInput == StateMachine_None || self->animator.animationID != ANI_JUMP))
             self->velocity.x += self->airAcceleration;
 
         self->direction = FLIP_NONE;

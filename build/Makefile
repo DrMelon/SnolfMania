@@ -225,6 +225,54 @@ SnolfMania/Objects/Snolf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.s
 .PHONY : SnolfMania/Objects/Snolf.c.s
 
+SnolfMania/Objects/Starpost.obj: SnolfMania/Objects/Starpost.c.obj
+.PHONY : SnolfMania/Objects/Starpost.obj
+
+# target to build an object file
+SnolfMania/Objects/Starpost.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.obj
+.PHONY : SnolfMania/Objects/Starpost.c.obj
+
+SnolfMania/Objects/Starpost.i: SnolfMania/Objects/Starpost.c.i
+.PHONY : SnolfMania/Objects/Starpost.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Starpost.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.i
+.PHONY : SnolfMania/Objects/Starpost.c.i
+
+SnolfMania/Objects/Starpost.s: SnolfMania/Objects/Starpost.c.s
+.PHONY : SnolfMania/Objects/Starpost.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Starpost.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.s
+.PHONY : SnolfMania/Objects/Starpost.c.s
+
+SnolfMania/Objects/Zone.obj: SnolfMania/Objects/Zone.c.obj
+.PHONY : SnolfMania/Objects/Zone.obj
+
+# target to build an object file
+SnolfMania/Objects/Zone.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.obj
+.PHONY : SnolfMania/Objects/Zone.c.obj
+
+SnolfMania/Objects/Zone.i: SnolfMania/Objects/Zone.c.i
+.PHONY : SnolfMania/Objects/Zone.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Zone.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.i
+.PHONY : SnolfMania/Objects/Zone.c.i
+
+SnolfMania/Objects/Zone.s: SnolfMania/Objects/Zone.c.s
+.PHONY : SnolfMania/Objects/Zone.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Zone.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Zone.c.s
+.PHONY : SnolfMania/Objects/Zone.c.s
+
 SnolfMania/dllmain.obj: SnolfMania/dllmain.c.obj
 .PHONY : SnolfMania/dllmain.obj
 
@@ -270,6 +318,12 @@ help:
 	@echo "... SnolfMania/Objects/Snolf.obj"
 	@echo "... SnolfMania/Objects/Snolf.i"
 	@echo "... SnolfMania/Objects/Snolf.s"
+	@echo "... SnolfMania/Objects/Starpost.obj"
+	@echo "... SnolfMania/Objects/Starpost.i"
+	@echo "... SnolfMania/Objects/Starpost.s"
+	@echo "... SnolfMania/Objects/Zone.obj"
+	@echo "... SnolfMania/Objects/Zone.i"
+	@echo "... SnolfMania/Objects/Zone.s"
 	@echo "... SnolfMania/dllmain.obj"
 	@echo "... SnolfMania/dllmain.i"
 	@echo "... SnolfMania/dllmain.s"
