@@ -29,7 +29,7 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     }
 
     // Allow the player to control the facing. Useful for visual sync.
-    if (snolfEngine->currentShotState == SNOLF_SHOT_READY)
+    if (snolfEngine->currentShotState == SNOLF_SHOT_READY && !snolfEngine->isSpinShot)
     {
         if (entity->left)
         {
@@ -101,7 +101,57 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
     {
         snolfEngine->vertShotPower = ((cosine / 2) + 127);
     }
+
+    if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
+    {
+        Snolf_UpdateSpinSetLogic(player, entity, snolfEngine);
+    }
 }
+
+void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
+{
+    // Player is trying to set spin. 
+    
+    // Handle button presses.
+    if(entity->right && !snolfEngine->wasRight)
+    {
+        snolfEngine->spinPower++;
+
+        if(snolfEngine->spinPower > 0) 
+        {
+            entity->direction = FLIP_NONE;
+        }
+
+        if(snolfEngine->spinPower > 3)
+        {
+            snolfEngine->spinPower = 3;
+        }
+
+        RSDK.PlaySfx(snolfEngine->sfxLockHoriz, false, 255);
+    }
+    if(entity->left && !snolfEngine->wasLeft)
+    {
+        snolfEngine->spinPower--;
+
+        if(snolfEngine->spinPower < 0)
+        {
+            entity->direction = FLIP_X;
+        }
+        
+        if(snolfEngine->spinPower < -3)
+        {
+            snolfEngine->spinPower = -3;
+        }
+
+        RSDK.PlaySfx(snolfEngine->sfxLockHoriz, false, 255);
+    }
+
+    entity->animator.speed = 30 + (abs(snolfEngine->spinPower * 30));
+    
+    snolfEngine->wasLeft = entity->left;
+    snolfEngine->wasRight = entity->right;
+}
+
 
 void Snolf_ResetShot(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
@@ -133,6 +183,23 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             snolfEngine->horizShotPower = 0;
             snolfEngine->vertShotPower = 0;
             snolfEngine->shotTimer = 0;
+            snolfEngine->isSpinShot = false;
+
+            // Player is holding down, and is Sonic... set that spin!
+            if(entity->down && entity->characterID == ID_SONIC)
+            {
+                snolfEngine->currentShotState = SNOLF_SHOT_SET_SPIN;
+                snolfEngine->isSpinShot = true;
+                snolfEngine->spinPower = 0;
+                if (!entity->sidekick)
+                {
+                    RSDK.PlaySfx(snolfEngine->sfxAdjustSpin, false, 255);
+                }
+
+                RSDK.SetSpriteAnimation(entity->aniFrames, ANI_DROPDASH, &entity->animator, true, 0);
+                return;
+            }
+
             snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
 
             // If player is facing left, adjust the accumulator so that it's partially through its cycle, so that the horiztonal shot starts moving left.
@@ -170,7 +237,14 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             if (!entity->sidekick)
             {
-                RSDK.PlaySfx(snolfEngine->sfxLaunchSnolf, false, 255);
+                if(!snolfEngine->isSpinShot)
+                {
+                    RSDK.PlaySfx(snolfEngine->sfxLaunchSnolf, false, 255);
+                }
+                else
+                {
+                    RSDK.PlaySfx(snolfEngine->sfxLaunchSpinSnolf, false, 255);
+                }
             }
             snolfEngine->currentShotState = SNOLF_SHOT_READY;
 
@@ -187,6 +261,17 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             snolfEngine->shotsTaken++;
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
+        }
+        else if(snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
+        {
+            snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
+            snolfEngine->shotTimer = 0;
+
+            if(snolfEngine->spinPower == 0)
+            {
+                snolfEngine->isSpinShot = false;
+                RSDK.SetSpriteAnimation(entity->aniFrames, ANI_JUMP, &entity->animator, true, 0);
+            }
         }
     }
 }
@@ -240,5 +325,10 @@ void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
 
         RSDK.DrawSprite(&snolfEngine->vertBarAnimator, &barDrawPos, false);
         RSDK.DrawRect(entity->position.x - TO_FIXED(5), entity->position.y - TO_FIXED(18) - TO_FIXED(vectorBarLen), TO_FIXED(9), TO_FIXED(vectorBarLen), 0xF0F000, 0xEF, INK_ALPHA, false);
+    }
+
+    if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
+    {
+        // TODO: Show Spin chevrons.
     }
 }

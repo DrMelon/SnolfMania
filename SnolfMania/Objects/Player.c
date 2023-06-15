@@ -165,6 +165,17 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
 bool32 Player_State_Roll_Snolfed(bool32 skipped)
 {
     RSDK_THIS(Player);
+
+    // Apply Spin Shot velocity on ground!
+    if(self->snolfEngine.isSpinShot && self->snolfEngine.spinPower != 0 && self->snolfEngine.currentShotState == SNOLF_SHOT_READY)
+    {
+        self->snolfEngine.isSpinShot = false;
+
+        RSDK.PlaySfx(self->snolfEngine.sfxLaunchSpinSnolf, false, 255);
+        self->velocity.x = TO_FIXED(self->snolfEngine.spinPower * 64);
+        self->groundVel = TO_FIXED(self->snolfEngine.spinPower * 4);
+    }
+
     Player_HandleGroundRotation();
     // Player_HandleRollDeceleration();
     Player_HandleRollDeceleration_Snolfed(); // We don't want to unroll when slowing down!
@@ -203,6 +214,8 @@ bool32 Player_State_Roll_Snolfed(bool32 skipped)
 bool32 Player_State_Air_Snolfed(bool32 skipped)
 {
     RSDK_THIS(Player);
+
+
 
 #if GAME_VERSION != VER_100
     self->tileCollisions = TILECOLLISION_DOWN;
@@ -281,6 +294,19 @@ bool32 Player_State_Air_Snolfed(bool32 skipped)
         }
     }
 
+    if(self->snolfEngine.isSpinShot) 
+    {
+        if(self->snolfEngine.spinPower < 0)
+        {
+            self->direction = FLIP_X;
+        }
+        if(self->snolfEngine.spinPower > 0)
+        {
+            self->direction = FLIP_NONE;
+        }
+
+        self->animator.speed = 30 + (abs(self->snolfEngine.spinPower * 30));
+    }
     return true; // Skip original air code.
 }
 

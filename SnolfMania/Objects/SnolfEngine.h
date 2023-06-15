@@ -8,7 +8,8 @@ typedef enum
 {
     SNOLF_SHOT_READY,
     SNOLF_SHOT_HORIZONTAL,
-    SNOLF_SHOT_VERTICAL
+    SNOLF_SHOT_VERTICAL,
+    SNOLF_SHOT_SET_SPIN
 } SnolfShotState;
 
 // This is the "Snolf Engine" - it is an abstraction that contains a bunch of useful data for performing Snolf functions.
@@ -24,6 +25,8 @@ typedef struct
 
     bool32 isSpinShot;
     int32 spinPower;
+    bool32 wasLeft;
+    bool32 wasRight;
 
     Vector2 lastGoodShotPosition;
 

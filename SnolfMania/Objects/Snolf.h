@@ -19,6 +19,8 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
 // Mulligan!
 void Snolf_ResetShot(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
 
+void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
+
 // This function handles any UI that needs drawn.
 void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
 
