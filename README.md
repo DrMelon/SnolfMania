@@ -8,7 +8,7 @@ Take control of Snolf - the "coolest golf ball" - in his biggest adventure yet! 
     * (Note that enabling Sonic Mania Plus content requires you to compile Sonic Mania yourself.)
 * Install **Sonic Mania** from Steam or your storefront of choice. Go to its directory, and copy the **Data.rsdk** file and place it in the same directory that you put the RSDKv5U decompilation.
 * Download **Snolf Mania** from the [Releases page here!](https://github.com/DrMelon/SnolfMania/releases)
-* Create a **"mods"** directory in the same directory that you put the RSDKv5U decompilation, and then extract **Snolf Mania** into it, so that the directory structure looks something like:  
+* Create a **"mods/SnolfMania"** directory in the same directory that you put the RSDKv5U decompilation, and then extract **Snolf Mania** into it, so that the directory structure looks something like:  
 
 ```
 RSDKv5U/
@@ -18,7 +18,7 @@ RSDKv5U/
 --------SnolfMania/
 ------------Data
 ------------SnolfMania.dll (or SnolfMania.so)
-------------
+------------... etc
 ```
 
 * Create a file called **modConfig.ini**, and put it in the **mods** folder. Copy and paste this into it:  
