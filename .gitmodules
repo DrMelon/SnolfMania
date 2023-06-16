@@ -1,3 +1,3 @@
 [submodule "GameAPI"]
 	path = GameAPI
-	url = git@github.com:Rubberduckycooly/GameAPI.git
+	url = https://github.com/Rubberduckycooly/GameAPI.git
