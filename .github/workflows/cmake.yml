@@ -12,10 +12,16 @@ env:
 
 jobs:
   build:
-    runs-on: [ubuntu-latest, windows-latest]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{matrix.os}}
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Get Submodules
+      run: git submodule update --init
 
     - name: Configure CMake
       run: cmake ${{github.workspace}}
