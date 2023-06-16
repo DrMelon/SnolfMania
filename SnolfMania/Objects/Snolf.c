@@ -12,6 +12,9 @@ bool32 ShouldRunSnolfCode(EntityPlayer *entity)
     if (entity->state == Player_State_Static)
         return false;
 
+    if (entity->sidekick) // Temporary fix for launch day bug.
+        return false;
+
     return true;
 }
 
