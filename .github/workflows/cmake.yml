@@ -29,4 +29,8 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
-
+    - name: Make Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: mods/SnolfMania
