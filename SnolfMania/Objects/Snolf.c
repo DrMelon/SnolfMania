@@ -4,10 +4,21 @@
 #include "Snolf.h"
 #include "Zone.h"
 
+bool32 ShouldRunSnolfCode(EntityPlayer *entity)
+{
+    if (entity->stateInput == StateMachine_None)
+        return false;
+
+    if (entity->state == Player_State_Static)
+        return false;
+
+    return true;
+}
+
 void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine)
 {
     // Bail if controls are locked (e.g, cutscene)
-    if (entity->stateInput == StateMachine_None)
+    if (!ShouldRunSnolfCode(entity))
     {
         return;
     }
@@ -246,6 +257,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             {
                 if (!snolfEngine->isSpinShot)
                 {
+                    RSDK.SetSpriteAnimation(entity->aniFrames, ANI_JUMP, &entity->animator, true, 0);
                     RSDK.PlaySfx(snolfEngine->sfxLaunchSnolf, false, 255);
                 }
                 else
@@ -262,6 +274,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             // Ptchoo!
             entity->velocity.x = TO_FIXED(snolfEngine->horizShotPower) / 18;
             entity->velocity.y = TO_FIXED(0 - snolfEngine->vertShotPower) / 20;
+
             // Force groundVel to a non-zero number; this helps inform the physics engine.
             entity->groundVel = (entity->velocity.x < 0) ? -TO_FIXED(4) : TO_FIXED(4);
             entity->applyJumpCap = false;
@@ -274,6 +287,15 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             {
                 entity->jumpAbilityState = 1;
             }
+            else
+            {
+                // Allow Sonic to use an air ability IF he has a shield equipped.
+                if (entity->shield == SHIELD_BUBBLE || entity->shield == SHIELD_FIRE || entity->shield == SHIELD_LIGHTNING)
+                {
+                    entity->jumpAbilityState = 1;
+                }
+            }
+
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
         }
         else if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)

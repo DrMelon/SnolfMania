@@ -175,14 +175,15 @@ bool32 Player_State_Ground_Snolfed(bool32 skipped)
         // Player_HandleGroundAnimation();
         Player_HandleGroundAnimation_Snolfed();
 
-        if (self->jumpPress && self->stateInput == StateMachine_None)
+        // Only allow jumps in cutscenes.
+        if (self->jumpPress && !ShouldRunSnolfCode(self))
         {
             Player_Action_Jump(self);
             self->timer = 0;
         }
         else
         {
-            if (self->stateInput != StateMachine_None)
+            if (!ShouldRunSnolfCode(self))
             {
                 if (self->groundVel)
                 {
@@ -266,7 +267,7 @@ bool32 Player_State_Roll_Snolfed(bool32 skipped)
         }
         self->jumpAbilityState = 0;
 
-        if (self->jumpPress && self->stateInput == StateMachine_None)
+        if (self->jumpPress && !ShouldRunSnolfCode(self)) // Only allow jumps in cutscenes.
             Player_Action_Jump(self);
     }
 
@@ -431,7 +432,7 @@ void Player_HandleRollDeceleration_Snolfed()
             if ((self->groundVel >= 0 && initialVel <= 0) || (self->groundVel <= 0 && initialVel >= 0))
             {
                 self->groundVel = 0;
-                if (self->stateInput == StateMachine_None) // Only unroll from a ball in cutscenes.
+                if (!ShouldRunSnolfCode(self)) // Only unroll from a ball in cutscenes.
                 {
                     self->state = Player_State_Ground;
                 }
@@ -459,7 +460,7 @@ void Player_HandleRollDeceleration_Snolfed()
         {
             if ((self->groundVel >= 0 && initialVel <= 0) || (self->groundVel <= 0 && initialVel >= 0))
             {
-                if (self->stateInput == StateMachine_None) // Only unroll from a ball in cutscenes.
+                if (!ShouldRunSnolfCode(self)) // Only unroll from a ball in cutscenes.
                 {
                     self->groundVel = 0;
                     self->state = Player_State_Ground;
@@ -660,7 +661,7 @@ void Player_HandleGroundAnimation_Snolfed()
                 // Not balancing
                 case 0b00000000:
                 default:
-                    // Player_HandleIdleAnimation();
+                    Player_HandleIdleAnimation();
                     break;
                 }
             }
@@ -685,7 +686,7 @@ void Player_HandleAirFriction_Snolfed()
     // NOTE: We must allow the player to move in the air if they don't have the rolled animation - so that springs don't result in softlocks.
     if (self->left)
     {
-        if (self->velocity.x > -self->topSpeed && (self->stateInput == StateMachine_None || self->animator.animationID != ANI_JUMP))
+        if (self->velocity.x > -self->topSpeed && (!ShouldRunSnolfCode(self) || self->animator.animationID != ANI_JUMP))
             self->velocity.x -= self->airAcceleration;
 
         self->direction = FLIP_X;
@@ -693,7 +694,7 @@ void Player_HandleAirFriction_Snolfed()
 
     if (self->right)
     {
-        if (self->velocity.x < self->topSpeed && (self->stateInput == StateMachine_None || self->animator.animationID != ANI_JUMP))
+        if (self->velocity.x < self->topSpeed && (!ShouldRunSnolfCode(self) || self->animator.animationID != ANI_JUMP))
             self->velocity.x += self->airAcceleration;
 
         self->direction = FLIP_NONE;
@@ -780,4 +781,128 @@ bool32 Snolf_EnsureInfiniteLives(bool32 skipped)
     }
 
     return false; // Do not override.
+}
+
+void Player_HandleIdleAnimation(void)
+{
+    RSDK_THIS(Player);
+
+    switch (self->characterID)
+    {
+    case ID_SONIC:
+#if !MANIA_USE_PLUS
+        // pre-1.05 super sonic didn't have a "bored" anim
+        if (self->superState != SUPERSTATE_SUPER)
+        {
+#endif
+            if (self->timer != 720 || self->isChibi || self->superState == SUPERSTATE_SUPER)
+            {
+                if (self->timer < 240)
+                {
+                    self->timer++;
+                    RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+                }
+                else
+                {
+                    self->timer++;
+                    if (self->animator.animationID == ANI_BORED_1)
+                    {
+                        if (self->animator.frameID == 41)
+                            self->timer = 0;
+                    }
+                    else
+                        RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_1, &self->animator, false, 0);
+                }
+            }
+            else
+            {
+                if (self->animator.animationID == ANI_BORED_2)
+                {
+                    if (self->animator.frameID == 67)
+                        self->timer = 0;
+                }
+                else
+                    RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_2, &self->animator, false, 0);
+            }
+#if !MANIA_USE_PLUS
+        }
+        else
+        {
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+        }
+#endif
+        break;
+
+    case ID_TAILS:
+        if (self->timer < 240)
+        {
+            self->timer++;
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+        }
+        else if (self->animator.animationID == ANI_BORED_1)
+        {
+            if (self->animator.frameID == 45)
+                self->timer = 0;
+        }
+        else
+        {
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_1, &self->animator, false, 0);
+        }
+        break;
+
+    case ID_KNUCKLES:
+        if (self->timer < 240)
+        {
+            self->timer++;
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+        }
+        else if (self->animator.animationID == ANI_BORED_1)
+        {
+            if (self->animator.frameID == 69)
+                self->timer = 0;
+        }
+        else
+        {
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_1, &self->animator, false, 0);
+        }
+        break;
+
+#if MANIA_USE_PLUS
+    case ID_MIGHTY:
+        if (self->timer < 240)
+        {
+            self->timer++;
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+        }
+        else if (self->animator.animationID == ANI_BORED_1)
+        {
+            if (self->animator.frameID == 35)
+                self->timer = 0;
+        }
+        else
+        {
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_1, &self->animator, false, 0);
+        }
+        break;
+
+    case ID_RAY:
+        if (self->timer < 240)
+        {
+            self->timer++;
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_IDLE, &self->animator, false, 0);
+        }
+        else if (self->animator.animationID == ANI_BORED_1)
+        {
+            if (self->animator.frameID == 55)
+                self->timer = 0;
+        }
+        else
+        {
+            RSDK.SetSpriteAnimation(self->aniFrames, ANI_BORED_1, &self->animator, false, 0);
+        }
+        break;
+#endif
+    default:
+        break;
+    }
 }

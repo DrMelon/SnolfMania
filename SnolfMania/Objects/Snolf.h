@@ -24,4 +24,7 @@ void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfE
 // This function handles any UI that needs drawn.
 void Snolf_Draw(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEngine);
 
+// Query if Snolf code should run.
+bool32 ShouldRunSnolfCode(EntityPlayer *entity);
+
 #endif // SNOLF_H

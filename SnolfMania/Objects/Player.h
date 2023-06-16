@@ -524,6 +524,7 @@ extern StateMachine(Player_State_Air);
 extern StateMachine(Player_State_Crouch);
 extern StateMachine(Player_State_LookUp);
 extern StateMachine(Player_State_TubeRoll);
+extern StateMachine(Player_State_Static);
 
 extern StateMachine(Dust_State_DustTrail);
 
@@ -548,6 +549,7 @@ bool32 Player_State_Air_Snolfed(bool32 skipped);
 void Player_HandleRollDeceleration_Snolfed(void);
 void Player_HandleGroundAnimation_Snolfed(void);
 void Player_HandleAirFriction_Snolfed(void);
+void Player_HandleIdleAnimation(void);
 
 // Additional Functions
 bool32 Snolf_EnsureInfiniteLives(bool32 skipped);

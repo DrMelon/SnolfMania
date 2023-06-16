@@ -29,6 +29,7 @@ StateMachine(Player_State_Air);
 StateMachine(Player_State_Crouch);
 StateMachine(Player_State_LookUp);
 StateMachine(Player_State_TubeRoll);
+StateMachine(Player_State_Static);
 
 StateMachine(Dust_State_DustTrail);
 
@@ -54,6 +55,7 @@ void InitModAPI(void)
     Player_State_Crouch = Mod.GetPublicFunction(NULL, "Player_State_Crouch");
     Player_State_LookUp = Mod.GetPublicFunction(NULL, "Player_State_LookUp");
     Player_State_TubeRoll = Mod.GetPublicFunction(NULL, "Player_State_TubeRoll");
+    Player_State_Static = Mod.GetPublicFunction(NULL, "Player_State_Static");
 
     Player_Action_Jump = Mod.GetPublicFunction(NULL, "Player_Action_Jump");
     Player_Action_Roll = Mod.GetPublicFunction(NULL, "Player_Action_Roll");
