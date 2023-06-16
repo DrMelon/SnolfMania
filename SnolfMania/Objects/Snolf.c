@@ -73,12 +73,15 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
     {
         if (snolfEngine->currentShotState == SNOLF_SHOT_READY)
         {
-            snolfEngine->shotResetPressTimer++;
-
-            if (snolfEngine->shotResetPressTimer >= 90)
+            if (entity->state == Player_State_Air || entity->state == Player_State_Roll)
             {
-                Snolf_ResetShot(player, entity, snolfEngine);
-                return;
+                snolfEngine->shotResetPressTimer++;
+
+                if (snolfEngine->shotResetPressTimer >= 90)
+                {
+                    Snolf_ResetShot(player, entity, snolfEngine);
+                    return;
+                }
             }
         }
     }
