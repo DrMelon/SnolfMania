@@ -56,7 +56,8 @@ SnolfMania=true
 * Otherwise, good luck.
 
 # Credits & Special Thanks
-* Using **Rubberduckycooly**'s GameAPI, Sonic Mania Decompilation, & RSDKv5 Decompilation. 
+* Using **Rubberduckycooly**'s GameAPI, Sonic Mania Decompilation, & RSDKv5 Decompilation. Without this work, none of this would be possible.
+* **MainMemory** built many of the tools used to edit RSDKv5 files, e.g, RSDKv5Extract. Thank you!
 * Some configuration and files based on **MegAmi24**'s mods. Thank you for making them public!
 * **Dowolff, Bartogian, videochess, Brossentia, Lizstar** - for your continued inspiration for me to make these horrible things.
 
