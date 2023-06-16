@@ -40,6 +40,7 @@ SnolfMania=true
 * Is your shot sending you careening into the unknown? **Are you stuck** between two aggressive springs, bouncing forever? **Hold the Jump button** while Snolf is moving to **mulligan, and reset yourself** back to the last place you took a shot.
 * **NEW, IN SNOLF MANIA: REQIUEM ULTIMAX**: When playing as Sonic, you will not have access to the Drop-Dash. Instead, press **Down+Jump** when you're on the ground and not moving to open the **Topspin/Backspin Meter**. Tap **Left** or **Right** to set your backspin or topspin speed, up to **3 levels (slow, medium, and fast)**. Lock it in with **Jump** and perform a **Snolf Shot** as usual; Snolf will be launched into the air with spin! If the power level wasn't zero, **Snolf will dash along the ground upon landing**, in the direction and speed that you set! Use this for complex maneuvers!
 
+
 # Building
 * I'm going to assume you know what you're doing if you're reading these instructions.
 * Check out the repository with git: `git clone --recursive git@github.com:DrMelon/SnolfMania.git`  
@@ -47,6 +48,8 @@ SnolfMania=true
 * **Linux/MacOS**: `cmake .`, then `cmake --build .`
 * **Windows**: Install vscode, and the CMake Tools extension from Microsoft. Open the folder in vscode, and when prompted to configure with CMake in vscode, select "Yes". Build release using the CMake Tools extension for Win x64. Note: I have only tested this with LLVM/Clang (16.0.5 x86_64-pc-windows-msvc) so far on Windows.
 * **Other Platforms**: You probably know better than I do - and it's likely going to involve running cmake with your preferred target configuration.
+
+[![CMake](https://github.com/DrMelon/SnolfMania/actions/workflows/cmake.yml/badge.svg)](https://github.com/DrMelon/SnolfMania/actions/workflows/cmake.yml)
 
 # Troubleshooting
 * If there's a significant, game-breaking bug, such as a total soft-lock **unresolvable by mulligans**, please raise an [Issue in the GitHub issues page of this project.](https://github.com/DrMelon/SnolfMania/issues).
