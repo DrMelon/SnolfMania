@@ -273,7 +273,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             // Ptchoo!
             entity->velocity.x = TO_FIXED(snolfEngine->horizShotPower) / 18;
-            entity->velocity.y = TO_FIXED(0 - snolfEngine->vertShotPower) / 20;
+            entity->velocity.y = TO_FIXED(0 - snolfEngine->vertShotPower) / 18;
 
             // Force groundVel to a non-zero number; this helps inform the physics engine.
             entity->groundVel = (entity->velocity.x < 0) ? -TO_FIXED(4) : TO_FIXED(4);
