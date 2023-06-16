@@ -48,6 +48,7 @@ typedef struct
     uint16 sfxAdjustSpin;
     uint16 sfxLaunchSpinSnolf;
     uint16 sfxResetShot;
+    uint16 sfxWallBonk;
 
 } SnolfEngine;
 

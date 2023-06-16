@@ -267,7 +267,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             entity->applyJumpCap = false;
 
             snolfEngine->shotsTaken++;
-            backupShotsTaken = entity->snolfEngine.shotsTaken;
+            backupShotsTaken = snolfEngine->shotsTaken;
 
             // Allow non-Sonic characters to use their air abilities.
             if (entity->characterID != ID_SONIC)

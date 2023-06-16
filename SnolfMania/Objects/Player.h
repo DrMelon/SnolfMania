@@ -551,5 +551,6 @@ void Player_HandleAirFriction_Snolfed(void);
 
 // Additional Functions
 bool32 Snolf_EnsureInfiniteLives(bool32 skipped);
+void Snolf_DoWallBounces();
 
 #endif //! OBJ_PLAYER_H

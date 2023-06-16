@@ -6,10 +6,13 @@
 #include "Snolf.h"
 #include "SnolfEngine.h"
 #include "../ModConfig.h"
+#include "Zone.h"
 
 ObjectPlayer *Player;
 EntityDust *Dust;
 int32 backupShotsTaken = 0;
+Hitbox Player_FallbackHitbox = {-10, -20, 10, 20};
+Entity *collisionEntity = NULL;
 
 // Player update function. Runs every frame.
 void Player_Update()
@@ -42,6 +45,32 @@ void Player_Create(void *data)
     self->snolfEngine.sfxAdjustSpin = RSDK.GetSfx("Global/Charge.wav");
     self->snolfEngine.sfxLaunchSpinSnolf = RSDK.GetSfx("Global/Release.wav");
     self->snolfEngine.sfxResetShot = RSDK.GetSfx("Global/Teleport.wav");
+    self->snolfEngine.sfxWallBonk = RSDK.GetSfx("Global/BubbleBounce.wav");
+
+    // After the stage loads, reset shots taken counter, but only if this is a fresh stage (e.g, no starposts hit, no special stage)
+    bool32 wasReload = false;
+    if (globals->specialRingID)
+    {
+        wasReload = true;
+    }
+    if (StarPost)
+    {
+        for (int32 p = 0; p < Player->playerCount; ++p)
+        {
+            if (StarPost->postIDs[p])
+            {
+                wasReload = true;
+            }
+        }
+    }
+    if (!wasReload)
+    {
+        self->snolfEngine.shotsTaken = 0;
+    }
+    else
+    {
+        self->snolfEngine.shotsTaken = backupShotsTaken;
+    }
 }
 
 // Player draw function. Runs on render.
@@ -668,6 +697,72 @@ void Player_HandleAirFriction_Snolfed()
             self->velocity.x += self->airAcceleration;
 
         self->direction = FLIP_NONE;
+    }
+
+    Snolf_DoWallBounces();
+}
+
+void Snolf_DoWallBounces()
+{
+    RSDK_THIS(Player);
+
+    // Hacky way to do wall-bouncing without having to reimplement the entire RSDK collision engine.
+    Hitbox *playerHitbox = self->outerbox;
+
+    if (!playerHitbox)
+    {
+        playerHitbox = &Player_FallbackHitbox;
+    }
+
+    uint8 movingRight = 0;
+    uint8 movingLeft = 0;
+
+    if (self->velocity.x >= 0)
+    {
+        movingRight = 1;
+    }
+
+    if (self->velocity.x <= 0)
+    {
+        movingLeft = 1;
+    }
+
+    uint8 maxCount = 2;
+    for (uint8 i = 0; i < maxCount; i++)
+    {
+        if (movingRight == 1)
+        {
+            bool32 collided = RSDK.ObjectTileCollision(self, Zone->collisionLayers, CMODE_LWALL, 0, TO_FIXED(playerHitbox->right) + self->velocity.x, 0, true);
+
+            if (collided)
+            {
+                movingRight = 2;
+            }
+        }
+
+        if (movingLeft == 1)
+        {
+            bool32 collided = RSDK.ObjectTileCollision(self, Zone->collisionLayers, CMODE_RWALL, 0, TO_FIXED(playerHitbox->left) + self->velocity.x, 0, true);
+
+            if (collided)
+            {
+                movingLeft = 2;
+            }
+        }
+    }
+
+    // Found a collision!
+    if (movingRight == 2)
+    {
+        // Bounce!
+        self->velocity.x = -self->velocity.x / 2;
+        RSDK.PlaySfx(self->snolfEngine.sfxWallBonk, false, 255);
+    }
+    else if (movingLeft == 2)
+    {
+        // Bounce!
+        self->velocity.x = -self->velocity.x / 2;
+        RSDK.PlaySfx(self->snolfEngine.sfxWallBonk, false, 255);
     }
 }
 
