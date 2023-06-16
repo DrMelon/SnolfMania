@@ -27,7 +27,7 @@ RSDKv5U/
 [Mods]
 SnolfMania=true
 ```
-
+* You can also toggle the mod on or off in-game Mod Menu built into the dev menu of the RSDKv5 decompilation, accessible with the Escape key (if it is enabled).
 * Now, you can **launch RSDKv5U_x64.exe** and, if everything is working, you can now enjoy Snolf Mania!
 * Alternatively, you can use the **RSDK Mod Manager** via [GameBanana.](https://gamebanana.com/tools/10457)
 
