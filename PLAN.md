@@ -12,8 +12,8 @@
 note: snolf wallbouncing might be harder. collision code that sets velocity lives in RSDK...  ProcessObjectMovement, LWallCollision, RWallCollision, ProcessAirCollision_Down etc
 
 TODO, big-ticket items:
-- [] Topspin/Backspin Replacement for drop-dash (Snolf only; other characters maintain their air-abilities)
-- [] UI for topspin/backspin; dark/light chevrons 
+- [X] Topspin/Backspin Replacement for drop-dash (Snolf only; other characters maintain their air-abilities)
+- [X] UI for topspin/backspin; dark/light chevrons 
 - [] Wall-bounces - this needs doing for playability and classic Snolf gamefeel.
-- [] Title screen alterations! Hoping this isn't too tricky.
+- [X] Title screen alterations! Hoping this isn't too tricky.
 - [] Instructions, packaging, blog/forum/discord posts, release mgmt.
