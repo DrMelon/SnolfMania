@@ -6,7 +6,7 @@
 
 bool32 ShouldRunSnolfCode(EntityPlayer *entity)
 {
-    if (entity->stateInput == StateMachine_None)
+    if (entity->stateInput != Player_Input_P1 && entity->stateInput != Player_Input_P2_Player)
         return false;
 
     if (entity->state == Player_State_Static)
@@ -14,6 +14,7 @@ bool32 ShouldRunSnolfCode(EntityPlayer *entity)
 
     if (entity->sidekick) // Temporary fix for launch day bug.
         return false;
+
 
     return true;
 }

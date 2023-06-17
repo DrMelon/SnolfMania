@@ -22,6 +22,8 @@ void (*Player_HandleAirMovement)();
 void (*Player_HandleGroundRotation)();
 void (*Player_HandleGroundMovement)();
 void (*HUD_DrawNumbersBase10)(Vector2 *drawPos, int32 value, int32 digitCount) = NULL;
+void (*Player_Input_P1)();
+void (*Player_Input_P2_Player)();
 
 StateMachine(Player_State_Ground);
 StateMachine(Player_State_Roll);
@@ -62,6 +64,9 @@ void InitModAPI(void)
     Player_HandleAirMovement = Mod.GetPublicFunction(NULL, "Player_HandleAirMovement");
     Player_HandleGroundRotation = Mod.GetPublicFunction(NULL, "Player_HandleGroundRotation");
     Player_HandleGroundMovement = Mod.GetPublicFunction(NULL, "Player_HandleGroundMovement");
+    Player_Input_P1 = Mod.GetPublicFunction(NULL, "Player_Input_P1");
+    Player_Input_P2_Player = Mod.GetPublicFunction(NULL, "Player_Input_P2_Player");
+
     HUD_DrawNumbersBase10 = Mod.GetPublicFunction(NULL, "HUD_DrawNumbersBase10");
 
     Dust_State_DustTrail = Mod.GetPublicFunction(NULL, "Dust_State_DustTrail");

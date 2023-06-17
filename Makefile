@@ -225,6 +225,30 @@ SnolfMania/Objects/Snolf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Snolf.c.s
 .PHONY : SnolfMania/Objects/Snolf.c.s
 
+SnolfMania/Objects/Starpost.o: SnolfMania/Objects/Starpost.c.o
+.PHONY : SnolfMania/Objects/Starpost.o
+
+# target to build an object file
+SnolfMania/Objects/Starpost.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.o
+.PHONY : SnolfMania/Objects/Starpost.c.o
+
+SnolfMania/Objects/Starpost.i: SnolfMania/Objects/Starpost.c.i
+.PHONY : SnolfMania/Objects/Starpost.i
+
+# target to preprocess a source file
+SnolfMania/Objects/Starpost.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.i
+.PHONY : SnolfMania/Objects/Starpost.c.i
+
+SnolfMania/Objects/Starpost.s: SnolfMania/Objects/Starpost.c.s
+.PHONY : SnolfMania/Objects/Starpost.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/Starpost.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/Starpost.c.s
+.PHONY : SnolfMania/Objects/Starpost.c.s
+
 SnolfMania/Objects/Zone.o: SnolfMania/Objects/Zone.c.o
 .PHONY : SnolfMania/Objects/Zone.o
 
@@ -294,6 +318,9 @@ help:
 	@echo "... SnolfMania/Objects/Snolf.o"
 	@echo "... SnolfMania/Objects/Snolf.i"
 	@echo "... SnolfMania/Objects/Snolf.s"
+	@echo "... SnolfMania/Objects/Starpost.o"
+	@echo "... SnolfMania/Objects/Starpost.i"
+	@echo "... SnolfMania/Objects/Starpost.s"
 	@echo "... SnolfMania/Objects/Zone.o"
 	@echo "... SnolfMania/Objects/Zone.i"
 	@echo "... SnolfMania/Objects/Zone.s"
