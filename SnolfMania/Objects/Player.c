@@ -700,7 +700,10 @@ void Player_HandleAirFriction_Snolfed()
         self->direction = FLIP_NONE;
     }
 
-    Snolf_DoWallBounces();
+    if (ShouldRunSnolfCode(self))
+    {
+        Snolf_DoWallBounces();
+    }
 }
 
 void Snolf_DoWallBounces()
