@@ -6,15 +6,17 @@
 
 bool32 ShouldRunSnolfCode(EntityPlayer *entity)
 {
+    // Don't run Snolf code if the player is not in control of the character.
     if (entity->stateInput != Player_Input_P1 && entity->stateInput != Player_Input_P2_Player)
         return false;
 
+    // Don't run Snolf code if the player's state has been forced into the Static state.
     if (entity->state == Player_State_Static)
         return false;
 
-    if (entity->sidekick) // Temporary fix for launch day bug.
+    // Don't run Snolf code if the player is a sidekick/AI-controlled character. (I might want to change this in the future, but there are bugs with end-of-level cutscenes.)
+    if (entity->sidekick)
         return false;
-
 
     return true;
 }
@@ -42,7 +44,8 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
     }
 
     // Allow the player to control the facing. Useful for visual sync.
-    if (snolfEngine->currentShotState == SNOLF_SHOT_READY && !snolfEngine->isSpinShot)
+    // However, we don't want them to be able to directly turn around if they're not in a ball.
+    if (snolfEngine->currentShotState == SNOLF_SHOT_READY && !snolfEngine->isSpinShot && (entity->animator.animationID == ANI_JUMP || entity->animator.animationID == ANI_DROPDASH))
     {
         if (entity->left)
         {
@@ -54,8 +57,10 @@ void Snolf_Main(ObjectPlayer *player, EntityPlayer *entity, SnolfEngine *snolfEn
         }
     }
 
+    // Update things like the Snolf Shot Meter.
     Snolf_UpdateShotLogic(player, entity, snolfEngine);
 
+    // Ensure that the player's animation speed is set correctly in Spin Shot mode.
     if (snolfEngine->isSpinShot)
     {
         entity->animator.speed = 30 + (abs(snolfEngine->spinPower * 30));
@@ -113,16 +118,19 @@ void Snolf_UpdateShotLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfEngi
     int32 sine = RSDK.Sin256(snolfEngine->shotTimer);
     int32 cosine = RSDK.Cos256(snolfEngine->shotTimer);
 
+    // Set the Horizontal shot speed.
     if (snolfEngine->currentShotState == SNOLF_SHOT_HORIZONTAL)
     {
         snolfEngine->horizShotPower = (sine);
     }
 
+    // Set the Vertical shot speed; using a 0.0 to 1.0 cosine wave instead of -1.0 to 1.0, so that the meter only goes up.
     if (snolfEngine->currentShotState == SNOLF_SHOT_VERTICAL)
     {
         snolfEngine->vertShotPower = ((cosine / 2) + 127);
     }
 
+    // If the player has started a Spin Shot, do that logic in its own function.
     if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
     {
         Snolf_UpdateSpinSetLogic(player, entity, snolfEngine);
@@ -133,7 +141,8 @@ void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfE
 {
     // Player is trying to set spin.
 
-    // Handle button presses.
+    // Handle button presses. Tapping right to increase power that way.
+    // We check against the player's previous input state so that it doesn't just increase the meter every frame the button is held.
     if (entity->right && !snolfEngine->wasRight)
     {
         snolfEngine->spinPower++;
@@ -150,6 +159,8 @@ void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfE
 
         RSDK.PlaySfx(snolfEngine->sfxLockHoriz, false, 255);
     }
+
+    // Tapping left to increase power that way instead.
     if (entity->left && !snolfEngine->wasLeft)
     {
         snolfEngine->spinPower--;
@@ -167,8 +178,10 @@ void Snolf_UpdateSpinSetLogic(ObjectPlayer *player, EntityPlayer *entity, SnolfE
         RSDK.PlaySfx(snolfEngine->sfxLockHoriz, false, 255);
     }
 
+    // Ensure animation speed is up to date.
     entity->animator.speed = 30 + (abs(snolfEngine->spinPower * 30));
 
+    // Set the previous input state.
     snolfEngine->wasLeft = entity->left;
     snolfEngine->wasRight = entity->right;
 }
@@ -272,6 +285,8 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
                     RSDK.PlaySfx(snolfEngine->sfxLaunchSpinSnolf, false, 255);
                 }
             }
+
+            // Reset Snolfing State.
             snolfEngine->currentShotState = SNOLF_SHOT_READY;
 
             // Force the player into the air.
@@ -286,8 +301,9 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
             entity->groundVel = (entity->velocity.x < 0) ? -TO_FIXED(4) : TO_FIXED(4);
             entity->applyJumpCap = false;
 
+            // Track the number of shots the player has taken.
             snolfEngine->shotsTaken++;
-            backupShotsTaken = snolfEngine->shotsTaken;
+            backupShotsTaken = snolfEngine->shotsTaken; // This is so that when you respawn, it doesn't get set back to 0.
 
             // Allow non-Sonic characters to use their air abilities.
             if (entity->characterID != ID_SONIC)
@@ -305,7 +321,7 @@ void Snolf_HandleButtonPress(ObjectPlayer *player, EntityPlayer *entity, SnolfEn
 
             RSDK.PrintLog(PRINT_NORMAL, "Successful Snolf!");
         }
-        else if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN)
+        else if (snolfEngine->currentShotState == SNOLF_SHOT_SET_SPIN) // Lock in spin shot.
         {
             snolfEngine->currentShotState = SNOLF_SHOT_HORIZONTAL;
             snolfEngine->shotTimer = 0;
