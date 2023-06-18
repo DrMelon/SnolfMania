@@ -3,6 +3,7 @@
 #include "Objects/HUD.h"
 #include "Objects/Zone.h"
 #include "Objects/Starpost.h"
+#include "Objects/DashLift.h"
 #include "ModConfig.h"
 
 // [SNOLF TODO] Includes
@@ -24,6 +25,7 @@ void (*Player_HandleGroundMovement)();
 void (*HUD_DrawNumbersBase10)(Vector2 *drawPos, int32 value, int32 digitCount) = NULL;
 void (*Player_Input_P1)();
 void (*Player_Input_P2_Player)();
+void (*DashLift_CheckOffScreen)();
 
 StateMachine(Player_State_Ground);
 StateMachine(Player_State_Roll);
@@ -48,6 +50,7 @@ void InitModAPI(void)
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Ground"), Player_State_Ground_Snolfed, true);
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Roll"), Player_State_Roll_Snolfed, true);
     Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "Player_State_Air"), Player_State_Air_Snolfed, true);
+    Mod.RegisterStateHook(Mod.GetPublicFunction(NULL, "DashLift_State_HandleDash"), DashLift_State_HandleDash_Snolfed, true);
 
     // [SNOLF TODO] Get existing public functions.
     // e.g, Player_JumpAbility_Sonic = Mod.GetPublicFunction(NULL, "Player_JumpAbility_Sonic");
@@ -70,6 +73,7 @@ void InitModAPI(void)
     HUD_DrawNumbersBase10 = Mod.GetPublicFunction(NULL, "HUD_DrawNumbersBase10");
 
     Dust_State_DustTrail = Mod.GetPublicFunction(NULL, "Dust_State_DustTrail");
+    DashLift_CheckOffScreen = Mod.GetPublicFunction(NULL, "DashLift_CheckOffScreen");
 
     // [SNOLF TODO] Register new functions with ADD_PUBLIC_FUNC.
     ADD_PUBLIC_FUNC(Player_State_Ground_Snolfed);

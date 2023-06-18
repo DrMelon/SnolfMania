@@ -15,6 +15,7 @@ add_library(SnolfMania SHARED
     ${MOD_NAME}/Objects/Starpost.c
     ${MOD_NAME}/Objects/HUD.c
     ${MOD_NAME}/Objects/Zone.c
+    ${MOD_NAME}/Objects/DashLift.c
 )
 
 target_include_directories(SnolfMania PRIVATE

@@ -153,6 +153,30 @@ GameAPI/C/GameAPI/Game.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/GameAPI/C/GameAPI/Game.c.s
 .PHONY : GameAPI/C/GameAPI/Game.c.s
 
+SnolfMania/Objects/DashLift.o: SnolfMania/Objects/DashLift.c.o
+.PHONY : SnolfMania/Objects/DashLift.o
+
+# target to build an object file
+SnolfMania/Objects/DashLift.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/DashLift.c.o
+.PHONY : SnolfMania/Objects/DashLift.c.o
+
+SnolfMania/Objects/DashLift.i: SnolfMania/Objects/DashLift.c.i
+.PHONY : SnolfMania/Objects/DashLift.i
+
+# target to preprocess a source file
+SnolfMania/Objects/DashLift.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/DashLift.c.i
+.PHONY : SnolfMania/Objects/DashLift.c.i
+
+SnolfMania/Objects/DashLift.s: SnolfMania/Objects/DashLift.c.s
+.PHONY : SnolfMania/Objects/DashLift.s
+
+# target to generate assembly for a file
+SnolfMania/Objects/DashLift.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SnolfMania.dir/build.make CMakeFiles/SnolfMania.dir/SnolfMania/Objects/DashLift.c.s
+.PHONY : SnolfMania/Objects/DashLift.c.s
+
 SnolfMania/Objects/HUD.o: SnolfMania/Objects/HUD.c.o
 .PHONY : SnolfMania/Objects/HUD.o
 
@@ -309,6 +333,9 @@ help:
 	@echo "... GameAPI/C/GameAPI/Game.o"
 	@echo "... GameAPI/C/GameAPI/Game.i"
 	@echo "... GameAPI/C/GameAPI/Game.s"
+	@echo "... SnolfMania/Objects/DashLift.o"
+	@echo "... SnolfMania/Objects/DashLift.i"
+	@echo "... SnolfMania/Objects/DashLift.s"
 	@echo "... SnolfMania/Objects/HUD.o"
 	@echo "... SnolfMania/Objects/HUD.i"
 	@echo "... SnolfMania/Objects/HUD.s"
